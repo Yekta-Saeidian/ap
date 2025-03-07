@@ -10,5 +10,6 @@ public class MGH {
         final double g = 9.8d;
         double u = mass * height * g;
         System.out.printf("gravitational potential energy = %.2f %n ", u);
+
     }
 }
