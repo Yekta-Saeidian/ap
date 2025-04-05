@@ -48,6 +48,7 @@ public class PacmanGUI extends JFrame implements KeyListener {
     }
 
     private int logic(int score) {
+        AWTKeyStroke e;
         if (dotPoint.x == pacmanPoint.x && dotPoint.y == pacmanPoint.y) {
             score++;
             System.out.println("score: " + score);
@@ -108,6 +109,8 @@ public class PacmanGUI extends JFrame implements KeyListener {
             direction = 2;
         else if (e.getKeyCode() == KeyEvent.VK_P)
             direction = 0;
+        else if (e.getKeyCode() == KeyEvent.VK_Q)
+            System.exit(0);
         else
             direction = -1;
 
