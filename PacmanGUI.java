@@ -129,18 +129,15 @@ public class PacmanGUI extends JFrame implements KeyListener {
             System.out.println("warning! you are hitting the wall.");
             xMovement = +1;
             yMovement = 0;
-        }
-        else if(pacmanPoint.x >= maxX) {
+        } else if (pacmanPoint.x >= maxX) {
             System.out.println("warning! you are hitting the wall.");
             xMovement = -1;
             yMovement = 0;
-        }
-        else if(pacmanPoint.y < 0) {
+        } else if (pacmanPoint.y < 0) {
             System.out.println("warning! you are hitting the wall.");
             xMovement = 0;
             yMovement = +1;
-        }
-        else if(pacmanPoint.y >= maxY) {
+        } else if (pacmanPoint.y >= maxY) {
             System.out.println("warning! you are hitting the wall.");
             xMovement = 0;
             yMovement = -1;
