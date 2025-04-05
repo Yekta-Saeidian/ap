@@ -14,8 +14,13 @@ import java.util.Random;
         final int LEFT = 1, RIGHT = 2, TOP = 3, BOTTOM = 4;
         Point dotPoint = new Point();
         int score = 0;
+        final int maxScore = 10;
+        final long timeLimit = 60000;
+        long startTime;
+        long finishTime;
 
         public EX2_PM_3_1() {
+            startTime = System.currentTimeMillis();
             addKeyListener(this);
             pacmanPoint.setLocation((width / boxSize) / 2, (height / boxSize) / 2);
             getNewDotPointLocation();
@@ -50,10 +55,22 @@ import java.util.Random;
         }
 
         private int logic(int score) {
+            finishTime = System.currentTimeMillis();
             if (dotPoint.x == pacmanPoint.x && dotPoint.y == pacmanPoint.y) {
                 score++;
                 System.out.println("score: " + score);
+                if (score == maxScore) {
+                    System.out.println("game finished!");
+                    System.out.println("You win!");
+                    System.exit(0);
+                }
                 getNewDotPointLocation();
+            }
+            long gameTime = finishTime - startTime;
+            if (gameTime >= timeLimit) {
+                System.out.println("warning! you are out of game time!");
+                System.out.println("you lost!");
+                System.exit(0);
             }
             movePacman();
             return score;
