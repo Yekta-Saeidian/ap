@@ -123,7 +123,28 @@ import java.util.Random;
         }
 
         private void handleCrossBorder() {
-
+            int xMovement = 0;
+            int yMovement = 0;
+            int maxX = width / boxSize;
+            int maxY = height / boxSize;
+            if (pacmanPoint.x < 0) {
+                System.out.println("warning! you are hitting the wall.");
+                xMovement = +1;
+                yMovement = 0;
+            } else if (pacmanPoint.x >= maxX) {
+                System.out.println("warning! you are hitting the wall.");
+                xMovement = -1;
+                yMovement = 0;
+            } else if (pacmanPoint.y < 0) {
+                System.out.println("warning! you are hitting the wall.");
+                xMovement = 0;
+                yMovement = +1;
+            } else if (pacmanPoint.y >= maxY) {
+                System.out.println("warning! you are hitting the wall.");
+                xMovement = 0;
+                yMovement = -1;
+            }
+            pacmanPoint.setLocation(pacmanPoint.x + xMovement, pacmanPoint.y + yMovement);
         }
 
         public static void main(String[] args) {
