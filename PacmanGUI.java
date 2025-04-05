@@ -13,7 +13,7 @@ public class PacmanGUI extends JFrame implements KeyListener {
     Point dotPoint = new Point();
     int score = 0;
 
-    public PacmanGUI() {
+    public PacmanGUI(){
         addKeyListener(this);
         pacmanPoint.setLocation((width / boxSize) / 2, (height / boxSize) / 2);
         getNewDotPointLocation();
