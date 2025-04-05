@@ -110,6 +110,8 @@ import java.util.Random;
                 direction = 2;
             else if (e.getKeyCode() == KeyEvent.VK_P)
                 direction = 0;
+            else if (e.getKeyCode() == KeyEvent.VK_Q)
+                System.exit(0);
             else
                 direction = -1;
 
