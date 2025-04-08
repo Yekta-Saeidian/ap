@@ -72,7 +72,7 @@ public class PacmanEngine {
             System.out.println("Game Over! Total time: " + totalTime + "ms");
         } else {
             long totalTime = System.currentTimeMillis() - startTime;
-            System.out.println("Time is up!  " + totalTime + "ms");
+            System.out.println("Time passed: " + totalTime + "ms");
         }
     }
 
@@ -122,5 +122,28 @@ public class PacmanEngine {
         if (score == c) {
             gameOver = true;
         }
+    }
+
+    public void save() {
+        try (PrintWriter writer = new PrintWriter("pacman_save.txt")) {
+            writer.println(k);
+            writer.println(c);
+            writer.println(score);
+            writer.println(a);
+            writer.println(b);
+
+            for (int i = 0; i < k + 2; i++) {
+                for (int j = 0; j < k + 2; j++) {
+                    writer.print(place[i][j]);
+                }
+                writer.println();
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Was not able to save the game!");
+        }
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }
