@@ -7,8 +7,8 @@ public class EX3_LM_1_1 {
         Book book1 = new Book("Fundamentals of Physics", "Martha Smith", 1200, 2029);
         Book book2 = new Book("Thomas' Calculus", "George B. Thomas Jr.", 3000, 2018);
 
-        Student student1 = new Student("Dina" , "Saeidian" , 403463124 , "computer science");
-        Student student2 = new Student("Neda" , "Rashtchi" , 401463120 , "physics");
+        Student student1 = new Student("Dina", "Saeidian", 403463124, "computer science");
+        Student student2 = new Student("Neda", "Rashtchi", 401463120, "physics");
 
         System.out.println("book information:");
         System.out.println();
@@ -79,12 +79,12 @@ class Book {
 }
 
 class Student {
-   private String firstName;
-   private String lastName;
-   private int ID;
-   private String field;
+    private String firstName;
+    private String lastName;
+    private int ID;
+    private String field;
 
-    public Student (String firstName, String lastName, int ID, String field) {
+    public Student(String firstName, String lastName, int ID, String field) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
