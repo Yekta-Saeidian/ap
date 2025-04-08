@@ -1,5 +1,7 @@
 package exercises.ex3;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -18,6 +20,9 @@ public class EX3_LM_1_2 {
                 "3.Shahpoor Saeidian - 401463130 - physics",
         };
 
+        saveDataInFile(books, students);
+        readDataFromFile();
+
         try {
             FileWriter bookWriter = new FileWriter("book.txt");
             for (String book : books) {
@@ -35,6 +40,44 @@ public class EX3_LM_1_2 {
 
         } catch (IOException e) {
             System.out.println("Error: file did not save!" + e.getMessage());
+        }
+    }
+
+    public static void saveDataInFile(String[] books, String[] students) {
+
+    }
+
+    public static void readDataFromFile() {
+        String[] books = new String[4];
+        String[] students = new String[3];
+
+        try {
+            BufferedReader bookReader = new BufferedReader(new FileReader("book.txt"));
+            for (int i = 0; i < books.length; i++) {
+                books[i] = bookReader.readLine();
+            }
+            bookReader.close();
+
+            BufferedReader studentReader = new BufferedReader(new FileReader("student.txt"));
+            for (int i = 0; i < students.length; i++) {
+                students[i] = studentReader.readLine();
+            }
+            studentReader.close();
+
+            System.out.println();
+            System.out.println("books: ");
+            for (String book : books) {
+                System.out.println(book);
+            }
+
+            System.out.println();
+            System.out.println("students: ");
+            for (String student : students) {
+                System.out.println(student);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error: file did not load!" + e.getMessage());
         }
     }
 }
