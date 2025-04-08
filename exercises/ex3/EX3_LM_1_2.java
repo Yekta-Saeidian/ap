@@ -22,7 +22,9 @@ public class EX3_LM_1_2 {
 
         saveDataInFile(books, students);
         readDataFromFile();
+    }
 
+    public static void saveDataInFile(String[] books, String[] students) {
         try {
             FileWriter bookWriter = new FileWriter("book.txt");
             for (String book : books) {
@@ -41,10 +43,6 @@ public class EX3_LM_1_2 {
         } catch (IOException e) {
             System.out.println("Error: file did not save!" + e.getMessage());
         }
-    }
-
-    public static void saveDataInFile(String[] books, String[] students) {
-
     }
 
     public static void readDataFromFile() {
