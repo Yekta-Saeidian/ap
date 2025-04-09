@@ -1,3 +1,5 @@
+package exercises.ex1;
+
 public class E6_1_a {
     public static void main(String[] args) {
         int sum = 0;
