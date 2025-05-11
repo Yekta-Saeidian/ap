@@ -14,4 +14,5 @@ public class Student {
         this.field = field;
         this.dateOfMembership = dateOfMembership;
     }
+
 }

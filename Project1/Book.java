@@ -12,4 +12,5 @@ public class Book {
         this.yearOfPublication=yearOfPublication;
         this.pages=pages;
     }
+
 }
