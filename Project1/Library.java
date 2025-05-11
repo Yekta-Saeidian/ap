@@ -1,6 +1,7 @@
 package Project1;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class Library {
     private String name;
@@ -32,5 +33,24 @@ public class Library {
         int pages = input.scanInt();
 
         books.add(new Book(title, author, yearOfPublication, pages));
+    }
+
+    public void register() {
+
+        System.out.println("first name:");
+        String firstName = input.scanString();
+
+        System.out.println("last name:");
+        String lastName = input.scanString();
+
+        System.out.println("id:");
+        int id = input.scanInt();
+
+        System.out.println("field:");
+        String field = input.scanString();
+
+        LocalDate dateOfMembership = LocalDate.now();
+
+        students.add(new Student(firstName , lastName , id , field, dateOfMembership));
     }
 }

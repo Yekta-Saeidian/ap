@@ -52,6 +52,7 @@ public class Menu {
             option = input.scanInt();
             switch (option) {
                 case 1:
+                    library.register();
                     break;
                 case 2:
                     break;
