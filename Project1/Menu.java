@@ -1,7 +1,7 @@
 package Project1;
 
 public class Menu {
-    int option;
+    int option=0;
 
     public void printManagerMenu(Library library , Input input) {
 
@@ -24,38 +24,45 @@ public class Menu {
     }
 
     public void managerOption(Library library , Input input) {
-        option = input.scanInt();
 
-        switch (option) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                library.addBook();
-                break;
-            default:
-                break;
+        while (option!=1 || option!=2 || option!=3 || option!=4) {
+
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    library.addBook();
+                    break;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
         }
     }
 
     public void studentOption(Library library , Input input) {
-        option = input.scanInt();
 
-        switch (option) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
+        while (option != 1 || option != 2 || option != 3 || option != 4) {
+
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
         }
     }
-
 }
