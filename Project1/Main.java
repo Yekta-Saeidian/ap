@@ -1,12 +1,11 @@
 package Project1;
 
-import java.util.Scanner;
-
 public class Main {
+
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
 
         Library library = new Library("The Eternal Bookshelf");
+        Input input = new Input();
         Menu menu = new Menu();
 
         System.out.println("User Type:\n");
@@ -17,13 +16,13 @@ public class Main {
 
         while (option!=1 || option!=2) {
 
-            option = scan.nextInt();
+            option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu();
+                    menu.printManagerMenu(library , input);
                     break;
                 case 2:
-                    menu.printStudentMenu();
+                    menu.printStudentMenu(library , input);
                     break;
                 default:
                     System.out.println("Invalid option");
