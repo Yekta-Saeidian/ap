@@ -13,22 +13,36 @@ public class Main {
         System.out.println("2.Library Assistant");
         System.out.println("3.Student");
 
-        int option = 0;
+        int option1 = 0;
+        int option2 = 0;
 
-        while (option!=1 && option!=2 && option!=3) {
+        while (option1 != 1 && option1 != 2 && option1 != 3) {
 
-            option = input.scanInt();
-            switch (option) {
+            option1 = input.scanInt();
+            switch (option1) {
                 case 1:
-//                    menu.logIn();
-                    menu.printManagerMenu(library , input);
+                    menu.printManagerMenu(library, input);
                     break;
                 case 2:
-//                    menu.logIn();
-                    menu.printLibraryAssistantMenu(library , input);
+                    menu.logIn(library, input);
+                    break;
                 case 3:
-//                    menu.logIn();
-                    menu.printStudentMenu(library , input);
+                    System.out.println("1.register");
+                    System.out.println("2.log in");
+                    while (option1 != 1 && option1 != 2) {
+                        option2 = input.scanInt();
+                        switch (option2) {
+                            case 1:
+                                library.register();
+                                break;
+                            case 2:
+                                menu.logIn(library, input);
+                                break;
+                            default:
+                                System.out.println("Invalid option");
+                                break;
+                        }
+                    }
                     break;
                 default:
                     System.out.println("Invalid option");

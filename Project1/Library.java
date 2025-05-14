@@ -12,6 +12,11 @@ public class Library {
     Input input = new Input();
     FileHandler fileHandler = new FileHandler();
 
+    public  Library() {
+        this.assistants.add(new LibraryAssistant("shahpoor", "saeidian", 1111));
+        this.assistants.add(new LibraryAssistant("azam", "ahangar", 1112));
+    }
+
     public Library(String name) {
         this.name = name;
         this.books = new ArrayList<>();
@@ -32,6 +37,7 @@ public class Library {
 
         assistants.add(new LibraryAssistant(firstName, lastName, id));
         fileHandler.saveAssistants(assistants);
+        System.out.println("new assistant added successfully");
     }
 
     public void addBook() {
@@ -50,6 +56,7 @@ public class Library {
 
         books.add(new Book(title, author, yearOfPublication, pages));
         fileHandler.saveBooks(books);
+        System.out.println("new book added successfully");
     }
 
     public void register() {
@@ -70,5 +77,6 @@ public class Library {
 
         students.add(new Student(firstName, lastName, id, field, dateOfMembership));
         fileHandler.saveStudents(students);
+        System.out.println("registered successfully:");
     }
 }
