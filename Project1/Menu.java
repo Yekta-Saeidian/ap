@@ -133,6 +133,7 @@ public class Menu {
             option = input.scanInt();
             switch (option) {
                 case 1:
+                    library.searchBook(library, input);
                     return 1;
                 case 2:
                     return 1;

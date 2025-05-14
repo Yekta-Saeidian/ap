@@ -84,7 +84,7 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
+                    menu.printLibraryAssistantMenu(library, input);
                     return 1;
                 case 2:
                     return 0;
@@ -123,7 +123,46 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
+                    menu.printStudentMenu(library, input);
+                    return 1;
+                case 2:
+                    return 0;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
+    }
+
+    public int searchBook(Library library, Input input) {
+        System.out.println("enter the book title::");
+        String bookTitle = input.scanString().toLowerCase();
+        boolean found = false;
+
+        for (Book book : fileHandler.loadBooks()) {
+            if (book.getTitle().toLowerCase().contains(bookTitle)) {
+                System.out.println("book title:" + book.getTitle());
+                System.out.println("book author:" + book.getAuthor());
+                System.out.println("book year of publication:" + book.getYearOfPublication());
+                System.out.println("book pages:" + book.getPages());
+
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("book not found");
+        }
+
+        System.out.println("1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printStudentMenu(library, input);
                     return 1;
                 case 2:
                     return 0;
