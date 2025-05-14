@@ -10,6 +10,7 @@ public class Library {
     private ArrayList<LibraryAssistant> assistants;
 
     Input input = new Input();
+    FileHandler fileHandler = new FileHandler();
 
     public Library(String name) {
         this.name = name;
@@ -47,6 +48,7 @@ public class Library {
         int pages = input.scanInt();
 
         books.add(new Book(title, author, yearOfPublication, pages));
+        fileHandler.saveBooks(books);
     }
 
     public void register() {
