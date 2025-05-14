@@ -10,7 +10,8 @@ public class Main {
 
         System.out.println("User Type:\n");
         System.out.println("1.Manager");
-        System.out.println("2.Student");
+        System.out.println("2.Library Assistant");
+        System.out.println("3.Student");
 
         int option = 0;
 
@@ -22,6 +23,8 @@ public class Main {
                     menu.printManagerMenu(library , input);
                     break;
                 case 2:
+                    menu.printLibraryAssistantMenu(library , input);
+                case 3:
                     menu.printStudentMenu(library , input);
                     break;
                 default:
