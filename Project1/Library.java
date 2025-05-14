@@ -31,6 +31,7 @@ public class Library {
         int id = input.scanInt();
 
         assistants.add(new LibraryAssistant(firstName, lastName, id));
+        fileHandler.saveAssistants(assistants);
     }
 
     public void addBook() {

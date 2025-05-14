@@ -1,6 +1,8 @@
 package Project1;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class FileHandler {
@@ -8,6 +10,7 @@ public class FileHandler {
     private final String BOOKS_FILE = "books.txt";
     private final String STUDENTS_FILE = "students.txt";
     private final String ASSISTANTS_FILE = "assistants.txt";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(BOOKS_FILE))) {
@@ -62,7 +65,30 @@ public class FileHandler {
         return books;
     }
 
-//    public ArrayList<Student> loadStudents() {}
-//
+  public ArrayList<Student> loadStudents() {
+      ArrayList<Student> students = new ArrayList<>();
+
+      try (BufferedReader reader = new BufferedReader(new FileReader(STUDENTS_FILE))) {
+          String line;
+
+          while ((line = reader.readLine()) != null) {
+              String[] parts = line.split(",");
+
+              if (parts.length == 5) {
+                  students.add(new Student(
+                          parts[0].trim(),
+                          parts[1].trim(),
+                          Integer.parseInt(parts[2].trim()),
+                          parts[3].trim(),
+                          LocalDate.parse(parts[4].trim(), DATE_FORMATTER)
+                  ));
+              }
+          }
+      } catch (IOException e) {
+          System.err.println("Error loading students from file: " + e.getMessage());
+      }
+      return students;
+  }
+
 //    public ArrayList<LibraryAssistant> loadAssistants() {}
 }
