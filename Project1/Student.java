@@ -16,4 +16,24 @@ public class Student {
         this.field = field;
         this.dateOfMembership = dateOfMembership;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public LocalDate getDateOfMembership() {
+        return dateOfMembership;
+    }
 }

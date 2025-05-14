@@ -22,6 +22,22 @@ public class FileHandler {
         }
     }
 
+    public void saveStudents(ArrayList<Student> students) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(STUDENTS_FILE))) {
+            for (Student student : students) {
+                writer.println(student.getFirstName() + "," +
+                        student.getLastName() + "," +
+                        student.getId() + "," +
+                        student.getField() + "," +
+                        student.getDateOfMembership());
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving books to file: " + e.getMessage());
+        }
+    }
+
+    public void saveAssistants(ArrayList<LibraryAssistant> assistants) {}
+
     public ArrayList<Book> loadBooks() {
         ArrayList<Book> books = new ArrayList<>();
 
@@ -45,4 +61,8 @@ public class FileHandler {
         }
         return books;
     }
+
+//    public ArrayList<Student> loadStudents() {}
+//
+//    public ArrayList<LibraryAssistant> loadAssistants() {}
 }
