@@ -40,7 +40,7 @@ public class Library {
         System.out.println("new assistant added successfully");
     }
 
-    public void addBook() {
+    public void addBook(Input input) {
 
         System.out.println("book title:");
         String title = input.scanString();

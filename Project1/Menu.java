@@ -107,7 +107,7 @@ public class Menu {
                 case 1:
                     break;
                 case 2:
-                    library.addBook();
+                    library.addBook(input);
                     break;
                 case 3:
                     break;
