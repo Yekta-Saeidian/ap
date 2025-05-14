@@ -16,7 +16,7 @@ public class Main {
         int option1 = 0;
         int option2 = 0;
 
-        while (option1 != 1 && option1 != 2 && option1 != 3) {
+        while (option2 != 1 || option2 != 2 || option2 != 3) {
 
             option1 = input.scanInt();
             switch (option1) {
@@ -33,7 +33,7 @@ public class Main {
                         option2 = input.scanInt();
                         switch (option2) {
                             case 1:
-                                library.register();
+                                library.register(library, input);
                                 break;
                             case 2:
                                 menu.logIn(library, input);

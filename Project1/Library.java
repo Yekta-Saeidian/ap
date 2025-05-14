@@ -10,9 +10,10 @@ public class Library {
     private ArrayList<LibraryAssistant> assistants;
 
     Input input = new Input();
+    Menu menu = new Menu();
     FileHandler fileHandler = new FileHandler();
 
-    public  Library() {
+    public Library() {
         this.assistants.add(new LibraryAssistant("shahpoor", "saeidian", 1111));
         this.assistants.add(new LibraryAssistant("azam", "ahangar", 1112));
     }
@@ -24,7 +25,7 @@ public class Library {
         this.assistants = new ArrayList<>();
     }
 
-    public void addLibraryAssistant() {
+    public int addLibraryAssistant(Library library, Input input) {
 
         System.out.println("first name:");
         String firstName = input.scanString();
@@ -37,10 +38,28 @@ public class Library {
 
         assistants.add(new LibraryAssistant(firstName, lastName, id));
         fileHandler.saveAssistants(assistants);
-        System.out.println("new assistant added successfully");
+        System.out.println("new assistant added successfully\n");
+
+        System.out.println("1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    return 1;
+                case 2:
+                    return 0;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
     }
 
-    public void addBook(Input input) {
+    public int addBook(Library library, Input input) {
 
         System.out.println("book title:");
         String title = input.scanString();
@@ -56,10 +75,28 @@ public class Library {
 
         books.add(new Book(title, author, yearOfPublication, pages));
         fileHandler.saveBooks(books);
-        System.out.println("new book added successfully");
+        System.out.println("new book added successfully\n");
+
+        System.out.println("1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    return 1;
+                case 2:
+                    return 0;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
     }
 
-    public void register() {
+    public int register(Library library, Input input) {
 
         System.out.println("first name:");
         String firstName = input.scanString();
@@ -77,6 +114,24 @@ public class Library {
 
         students.add(new Student(firstName, lastName, id, field, dateOfMembership));
         fileHandler.saveStudents(students);
-        System.out.println("registered successfully:");
+        System.out.println("registered successfully\n");
+
+        System.out.println("1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    return 1;
+                case 2:
+                    return 0;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
     }
 }

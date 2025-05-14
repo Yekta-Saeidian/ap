@@ -4,7 +4,7 @@ public class Menu {
     int option = 0;
     FileHandler fileHandler = new FileHandler();
 
-    public void logIn(Library library, Input input) {
+    public int logIn(Library library, Input input) {
         System.out.println("enter your id");
         int id = input.scanInt();
         boolean found = false;
@@ -13,7 +13,7 @@ public class Menu {
             if (id == student.getId()) {
                 printStudentMenu(library, input);
                 found = true;
-                break;
+                return 1;
             }
         }
 
@@ -22,7 +22,7 @@ public class Menu {
                 if (id == libraryAssistant.getId()) {
                     printLibraryAssistantMenu(library, input);
                     found = true;
-                    break;
+                    return 1;
                 }
             }
         }
@@ -33,15 +33,23 @@ public class Menu {
             System.out.println("2.exit");
 
             option = 0;
-            while (option != 2) {
+            while (true) {
                 option = input.scanInt();
 
-                if (option == 1)
-                    logIn(library, input);
-                else if (option != 2)
-                    System.out.println("invalid option");
+                switch (option) {
+                    case 1:
+                        logIn(library, input);
+                        return 1;
+                    case 2:
+                        return 0;
+                    default:
+                        System.out.println("invalid option");
+                        break;
+                }
             }
         }
+
+        return 0;
     }
 
     public void printManagerMenu(Library library, Input input) {
@@ -74,23 +82,23 @@ public class Menu {
         studentOption(library, input);
     }
 
-    public void managerOption(Library library, Input input) {
+    public int managerOption(Library library, Input input) {
 
-        while (option != 5) {
+        while (true) {
 
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    library.addLibraryAssistant();
-                    break;
+                    library.addLibraryAssistant(library, input);
+                    return 1;
                 case 2:
-                    break;
+                    return 1;
                 case 3:
-                    break;
+                    return 1;
                 case 4:
-                    break;
+                    return 1;
                 case 5:
-                    break;
+                    return 0;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -98,19 +106,19 @@ public class Menu {
         }
     }
 
-    public void libraryAssistantOption(Library library, Input input) {
+    public int libraryAssistantOption(Library library, Input input) {
 
-        while (option != 3) {
+        while (true) {
 
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    break;
+                    return 1;
                 case 2:
-                    library.addBook(input);
-                    break;
+                    library.addBook(library, input);
+                    return 1;
                 case 3:
-                    break;
+                    return 0;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -118,20 +126,20 @@ public class Menu {
         }
     }
 
-    public void studentOption(Library library, Input input) {
+    public int studentOption(Library library, Input input) {
 
-        while (option != 4) {
+        while (true) {
 
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    break;
+                    return 1;
                 case 2:
-                    break;
+                    return 1;
                 case 3:
-                    break;
+                    return 1;
                 case 4:
-                    break;
+                    return 0;
                 default:
                     System.out.println("Invalid option");
                     break;
