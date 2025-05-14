@@ -68,7 +68,7 @@ public class Library {
 
         LocalDate dateOfMembership = LocalDate.now();
 
-        students.add(new Student(firstName , lastName , id , field, dateOfMembership));
+        students.add(new Student(firstName, lastName, id, field, dateOfMembership));
         fileHandler.saveStudents(students);
     }
 }

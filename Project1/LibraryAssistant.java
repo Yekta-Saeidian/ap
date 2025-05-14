@@ -11,4 +11,15 @@ public class LibraryAssistant {
         this.id = id;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

@@ -35,11 +35,21 @@ public class FileHandler {
                         student.getDateOfMembership());
             }
         } catch (IOException e) {
-            System.err.println("Error saving books to file: " + e.getMessage());
+            System.err.println("Error saving students to file: " + e.getMessage());
         }
     }
 
-    public void saveAssistants(ArrayList<LibraryAssistant> assistants) {}
+    public void saveAssistants(ArrayList<LibraryAssistant> assistants) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(ASSISTANTS_FILE))) {
+            for (LibraryAssistant assistant : assistants) {
+                writer.println(assistant.getFirstName() + "," +
+                        assistant.getLastName() + "," +
+                        assistant.getId());
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving assistants to file: " + e.getMessage());
+        }
+    }
 
     public ArrayList<Book> loadBooks() {
         ArrayList<Book> books = new ArrayList<>();
@@ -65,30 +75,51 @@ public class FileHandler {
         return books;
     }
 
-  public ArrayList<Student> loadStudents() {
-      ArrayList<Student> students = new ArrayList<>();
+    public ArrayList<Student> loadStudents() {
+        ArrayList<Student> students = new ArrayList<>();
 
-      try (BufferedReader reader = new BufferedReader(new FileReader(STUDENTS_FILE))) {
-          String line;
+        try (BufferedReader reader = new BufferedReader(new FileReader(STUDENTS_FILE))) {
+            String line;
 
-          while ((line = reader.readLine()) != null) {
-              String[] parts = line.split(",");
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
 
-              if (parts.length == 5) {
-                  students.add(new Student(
-                          parts[0].trim(),
-                          parts[1].trim(),
-                          Integer.parseInt(parts[2].trim()),
-                          parts[3].trim(),
-                          LocalDate.parse(parts[4].trim(), DATE_FORMATTER)
-                  ));
-              }
-          }
-      } catch (IOException e) {
-          System.err.println("Error loading students from file: " + e.getMessage());
-      }
-      return students;
-  }
+                if (parts.length == 5) {
+                    students.add(new Student(
+                            parts[0].trim(),
+                            parts[1].trim(),
+                            Integer.parseInt(parts[2].trim()),
+                            parts[3].trim(),
+                            LocalDate.parse(parts[4].trim(), DATE_FORMATTER)
+                    ));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading students from file: " + e.getMessage());
+        }
+        return students;
+    }
 
-//    public ArrayList<LibraryAssistant> loadAssistants() {}
+    public ArrayList<LibraryAssistant> loadAssistants() {
+        ArrayList<LibraryAssistant> assistants = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(ASSISTANTS_FILE))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length == 3) {
+                    assistants.add(new LibraryAssistant(
+                            parts[0].trim(),
+                            parts[1].trim(),
+                            Integer.parseInt(parts[2].trim()))
+                    );
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading assistants from file: " + e.getMessage());
+        }
+        return assistants;
+    }
 }
