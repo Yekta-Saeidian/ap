@@ -18,6 +18,20 @@ public class Library {
         this.assistants = new ArrayList<>();
     }
 
+    public void addLibraryAssistant() {
+
+        System.out.println("first name:");
+        String firstName = input.scanString();
+
+        System.out.println("last name:");
+        String lastName = input.scanString();
+
+        System.out.println("ID:");
+        int id = input.scanInt();
+
+        assistants.add(new LibraryAssistant(firstName, lastName, id));
+    }
+
     public void addBook() {
 
         System.out.println("book title:");
@@ -43,7 +57,7 @@ public class Library {
         System.out.println("last name:");
         String lastName = input.scanString();
 
-        System.out.println("id:");
+        System.out.println("ID:");
         int id = input.scanInt();
 
         System.out.println("field:");

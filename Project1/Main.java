@@ -15,16 +15,19 @@ public class Main {
 
         int option = 0;
 
-        while (option!=1 || option!=2) {
+        while (option!=1 && option!=2 && option!=3) {
 
             option = input.scanInt();
             switch (option) {
                 case 1:
+//                    menu.logIn();
                     menu.printManagerMenu(library , input);
                     break;
                 case 2:
+//                    menu.logIn();
                     menu.printLibraryAssistantMenu(library , input);
                 case 3:
+//                    menu.logIn();
                     menu.printStudentMenu(library , input);
                     break;
                 default:
