@@ -18,7 +18,7 @@ public class FileHandler {
                 writer.println(book.getTitle() + "," +
                         book.getAuthor() + "," +
                         book.getYearOfPublication() + "," +
-                        book.getPages() + "" +
+                        book.getPages() + "," +
                         book.isBorrowed());
             }
         } catch (IOException e) {

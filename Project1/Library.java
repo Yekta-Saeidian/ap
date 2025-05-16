@@ -173,20 +173,23 @@ public class Library {
 
         for (Book book : fileHandler.loadBooks()) {
             if (book.getTitle().toLowerCase().contains(bookTitle)) {
+
                 System.out.println("book title:" + book.getTitle());
                 System.out.println("book author:" + book.getAuthor());
                 System.out.println("book year of publication:" + book.getYearOfPublication());
                 System.out.println("book pages:" + book.getPages());
-                if(book.isBorrowed() == false)
-                    System.out.println("status: available");
-                else {
+                if(book.isBorrowed() == true)
                     System.out.println("status: borrowed");
-                    System.out.println("would you like to borrow this book? (Y/N)");
+                else {
+                    System.out.println("status: available");
+                    System.out.println("\nwould you like to borrow this book? (Y/N)");
                     String answer = input.scanString();
 
                     if (answer.toLowerCase().equals("y")) {
                         int bookIndex = books.indexOf(book);
                         borrowRequest(library, input, bookIndex);
+
+                        System.out.println("request submitted successfully.");
                     }
                     else
                         break;
