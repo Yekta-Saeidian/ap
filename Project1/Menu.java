@@ -75,7 +75,7 @@ public class Menu {
     public void printStudentMenu(Library library, Input input) {
 
         System.out.println("1.search book");
-        System.out.println("2.borrow book");
+        System.out.println("2.unreturned book list");
         System.out.println("3.return book");
         System.out.println("4.exit");
 

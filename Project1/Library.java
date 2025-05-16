@@ -89,7 +89,7 @@ public class Library {
         System.out.println("number of pages:");
         int pages = input.scanInt();
 
-        books.add(new Book(title, author, yearOfPublication, pages));
+        books.add(new Book(title, author, yearOfPublication, pages , false));
 
         System.out.println("\n1.add more books");
         System.out.println("2.save");

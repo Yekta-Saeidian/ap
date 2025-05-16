@@ -18,7 +18,8 @@ public class FileHandler {
                 writer.println(book.getTitle() + "," +
                         book.getAuthor() + "," +
                         book.getYearOfPublication() + "," +
-                        book.getPages());
+                        book.getPages() + "" +
+                        book.isBorrowed());
             }
         } catch (IOException e) {
             System.err.println("Error saving books to file: " + e.getMessage());
@@ -60,13 +61,13 @@ public class FileHandler {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
-                if (parts.length == 4) {
+                if (parts.length == 5) {
                     books.add(new Book(
                             parts[0].trim(),
                             parts[1].trim(),
                             Integer.parseInt(parts[2].trim()),
-                            Integer.parseInt(parts[3].trim())
-                    ));
+                            Integer.parseInt(parts[3].trim()),
+                            Boolean.parseBoolean(parts[4].trim())));
                 }
             }
         } catch (IOException e) {
