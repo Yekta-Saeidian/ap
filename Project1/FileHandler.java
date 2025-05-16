@@ -13,7 +13,7 @@ public class FileHandler {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(BOOKS_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(BOOKS_FILE , true))) {
             for (Book book : books) {
                 writer.println(book.getTitle() + "," +
                         book.getAuthor() + "," +
@@ -26,7 +26,7 @@ public class FileHandler {
     }
 
     public void saveStudents(ArrayList<Student> students) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(STUDENTS_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(STUDENTS_FILE , true))) {
             for (Student student : students) {
                 writer.println(student.getFirstName() + "," +
                         student.getLastName() + "," +
@@ -40,7 +40,7 @@ public class FileHandler {
     }
 
     public void saveAssistants(ArrayList<LibraryAssistant> assistants) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(ASSISTANTS_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(ASSISTANTS_FILE , true))) {
             for (LibraryAssistant assistant : assistants) {
                 writer.println(assistant.getFirstName() + "," +
                         assistant.getLastName() + "," +

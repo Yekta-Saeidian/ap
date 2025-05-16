@@ -60,6 +60,7 @@ public class Library {
     }
 
     public int addBook(Library library, Input input) {
+        int option = 0;
 
         System.out.println("book title:");
         String title = input.scanString();
@@ -74,26 +75,39 @@ public class Library {
         int pages = input.scanInt();
 
         books.add(new Book(title, author, yearOfPublication, pages));
-        fileHandler.saveBooks(books);
-        System.out.println("new book added successfully\n");
 
-        System.out.println("1.menu");
-        System.out.println("2.exit");
-        int option = 0;
+        System.out.println("\n1.add more books");
+        System.out.println("2.save");
         while (true) {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printLibraryAssistantMenu(library, input);
-                    return 1;
-                case 2:
-                    return 0;
-                default:
-                    System.out.println("invalid option");
+                    addBook(library, input);
                     break;
-            }
+                case 2:
+                    fileHandler.saveBooks(books);
+                    System.out.println("new book added successfully\n");
 
+                    System.out.println("1.menu");
+                    System.out.println("2.exit");
+                    option = 0;
+                    while (true) {
+                        option = input.scanInt();
+                        switch (option) {
+                            case 1:
+                                menu.printLibraryAssistantMenu(library, input);
+                                return 1;
+                            case 2:
+                                return 0;
+                            default:
+                                System.out.println("invalid option");
+                                break;
+                        }
+
+                    }
+            }
         }
+
     }
 
     public int register(Library library, Input input) {
