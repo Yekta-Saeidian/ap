@@ -26,6 +26,7 @@ public class Library {
     }
 
     public int addLibraryAssistant(Library library, Input input) {
+        int option = 0;
 
         System.out.println("first name:");
         String firstName = input.scanString();
@@ -37,25 +38,39 @@ public class Library {
         int id = input.scanInt();
 
         assistants.add(new LibraryAssistant(firstName, lastName, id));
-        fileHandler.saveAssistants(assistants);
-        System.out.println("new assistant added successfully\n");
 
-        System.out.println("1.menu");
-        System.out.println("2.exit");
-        int option = 0;
+        System.out.println("\n1.add more assistants");
+        System.out.println("2.save");
         while (true) {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
-                    return 1;
+                    addLibraryAssistant(library, input);
+                    break;
                 case 2:
-                    return 0;
+                    fileHandler.saveAssistants(assistants);
+                    System.out.println("new assistant added successfully\n");
+
+                    System.out.println("1.menu");
+                    System.out.println("2.exit");
+                    option = 0;
+                    while (true) {
+                        option = input.scanInt();
+                        switch (option) {
+                            case 1:
+                                menu.printManagerMenu(library, input);
+                                return 1;
+                            case 2:
+                                return 0;
+                            default:
+                                System.out.println("invalid option");
+                                break;
+                        }
+                    }
                 default:
                     System.out.println("invalid option");
                     break;
             }
-
         }
     }
 
@@ -103,8 +118,10 @@ public class Library {
                                 System.out.println("invalid option");
                                 break;
                         }
-
                     }
+                default:
+                    System.out.println("invalid option");
+                    break;
             }
         }
 
@@ -187,4 +204,5 @@ public class Library {
 
         }
     }
+
 }
