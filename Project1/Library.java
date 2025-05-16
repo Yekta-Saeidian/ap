@@ -177,6 +177,20 @@ public class Library {
                 System.out.println("book author:" + book.getAuthor());
                 System.out.println("book year of publication:" + book.getYearOfPublication());
                 System.out.println("book pages:" + book.getPages());
+                if(book.isBorrowed() == false)
+                    System.out.println("status: available");
+                else {
+                    System.out.println("status: borrowed");
+                    System.out.println("would you like to borrow this book? (Y/N)");
+                    String answer = input.scanString();
+
+                    if (answer.toLowerCase().equals("y")) {
+                        int bookIndex = books.indexOf(book);
+                        borrowRequest(library, input, bookIndex);
+                    }
+                    else
+                        break;
+                }
 
                 found = true;
             }
@@ -186,7 +200,7 @@ public class Library {
             System.out.println("book not found");
         }
 
-        System.out.println("1.menu");
+        System.out.println("\n1.menu");
         System.out.println("2.exit");
         int option = 0;
         while (true) {
@@ -203,6 +217,10 @@ public class Library {
             }
 
         }
+    }
+
+    public void borrowRequest(Library library, Input input, int bookIndex) {
+
     }
 
 }

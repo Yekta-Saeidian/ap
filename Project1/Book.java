@@ -5,12 +5,14 @@ public class Book {
     private String author;
     private int yearOfPublication;
     private int pages;
+    private boolean borrowed;
 
-    public Book(String title , String author , int yearOfPublication , int pages) {
+    public Book(String title , String author , int yearOfPublication , int pages , boolean borrowed) {
         this.title=title;
         this.author=author;
         this.yearOfPublication=yearOfPublication;
         this.pages=pages;
+        this.borrowed=borrowed;
     }
 
     public String getTitle() {
@@ -27,5 +29,9 @@ public class Book {
 
     public int getPages() {
         return pages;
+    }
+
+    public boolean isBorrowed() {
+        return borrowed;
     }
 }
