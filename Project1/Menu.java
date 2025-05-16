@@ -11,7 +11,7 @@ public class Menu {
 
         for (Student student : fileHandler.loadStudents()) {
             if (id == student.getId()) {
-                printStudentMenu(library, input);
+                printStudentMenu(library, input , id);
                 found = true;
                 return 1;
             }
@@ -72,14 +72,14 @@ public class Menu {
         libraryAssistantOption(library, input);
     }
 
-    public void printStudentMenu(Library library, Input input) {
+    public void printStudentMenu(Library library, Input input, int id) {
 
         System.out.println("1.search book");
         System.out.println("2.unreturned book list");
         System.out.println("3.return book");
         System.out.println("4.exit");
 
-        studentOption(library, input);
+        studentOption(library, input , id);
     }
 
     public int managerOption(Library library, Input input) {
@@ -126,14 +126,14 @@ public class Menu {
         }
     }
 
-    public int studentOption(Library library, Input input) {
+    public int studentOption(Library library, Input input, int id) {
 
         while (true) {
 
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    library.searchBook(library, input);
+                    library.searchBook(library, input, id);
                     return 1;
                 case 2:
                     return 1;

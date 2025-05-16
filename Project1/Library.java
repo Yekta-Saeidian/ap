@@ -25,6 +25,10 @@ public class Library {
         this.assistants = new ArrayList<>();
     }
 
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
     public int addLibraryAssistant(Library library, Input input) {
         int option = 0;
 
@@ -89,7 +93,7 @@ public class Library {
         System.out.println("number of pages:");
         int pages = input.scanInt();
 
-        books.add(new Book(title, author, yearOfPublication, pages , false));
+        books.add(new Book(title, author, yearOfPublication, pages, false));
 
         System.out.println("\n1.add more books");
         System.out.println("2.save");
@@ -154,7 +158,7 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input);
+                    menu.printStudentMenu(library, input, id);
                     return 1;
                 case 2:
                     return 0;
@@ -166,7 +170,7 @@ public class Library {
         }
     }
 
-    public int searchBook(Library library, Input input) {
+    public int searchBook(Library library, Input input, int id) {
         System.out.println("enter the book title::");
         String bookTitle = input.scanString().toLowerCase();
         boolean found = false;
@@ -178,7 +182,7 @@ public class Library {
                 System.out.println("book author:" + book.getAuthor());
                 System.out.println("book year of publication:" + book.getYearOfPublication());
                 System.out.println("book pages:" + book.getPages());
-                if(book.isBorrowed() == true)
+                if (book.isBorrowed() == true)
                     System.out.println("status: borrowed");
                 else {
                     System.out.println("status: available");
@@ -186,12 +190,10 @@ public class Library {
                     String answer = input.scanString();
 
                     if (answer.toLowerCase().equals("y")) {
-                        int bookIndex = books.indexOf(book);
-                        borrowRequest(library, input, bookIndex);
-
                         System.out.println("request submitted successfully.");
-                    }
-                    else
+                        borrowRequest(library, input, bookTitle, id);
+
+                    } else
                         break;
                 }
 
@@ -210,7 +212,7 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input);
+                    menu.printStudentMenu(library, input, id);
                     return 1;
                 case 2:
                     return 0;
@@ -222,8 +224,29 @@ public class Library {
         }
     }
 
-    public void borrowRequest(Library library, Input input, int bookIndex) {
+    public void borrowRequest(Library library, Input input, String bookTitle, int id) {
+        FileHandler fileHandler = new FileHandler();
 
+        System.out.println("\nborrow request:");
+        for (Book book : fileHandler.loadBooks()) {
+            if (book.getTitle().toLowerCase().contains(bookTitle)) {
+
+                System.out.println("book title:" + book.getTitle());
+                System.out.println("book author:" + book.getAuthor());
+                System.out.println("book year of publication:" + book.getYearOfPublication());
+                System.out.println("book pages:" + book.getPages());
+            }
+        }
+
+        System.out.println("\nrequester:");
+        for (Student student : fileHandler.loadStudents()) {
+            if (id == student.getId()) {
+                System.out.println("name: " + student.getFirstName() + " " + student.getLastName());
+                System.out.println("id: " + student.getId());
+                System.out.println("field: " + student.getField());
+                System.out.println("date of membership: " + student.getDateOfMembership());
+            }
+        }
     }
 
 }
