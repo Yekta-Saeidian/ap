@@ -118,7 +118,7 @@ public class Library {
                         option = input.scanInt();
                         switch (option) {
                             case 1:
-                                menu.printLibraryAssistantMenu(library, input , assistantID);
+                                menu.printLibraryAssistantMenu(library, input, assistantID);
                                 return 1;
                             case 2:
                                 return 0;
@@ -230,6 +230,66 @@ public class Library {
         }
     }
 
+    public void returnBookRequest(Library library, Input input, int id) {
+        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Student> students = fileHandler.loadStudents();
+        boolean found = false;
+
+        for (Borrow request : requests) {
+            if (request.isApproved() == true) {
+
+                if (request.getStudentId() == id) {
+                    Book book = findBookByTitle(books, request.getBookTitle());
+
+                    if (book != null) {
+                        System.out.println("\nbook title:" + book.getTitle());
+                        System.out.println("book author:" + book.getAuthor());
+                        System.out.println("book year of publication:" + book.getYearOfPublication());
+                        System.out.println("book pages:" + book.getPages());
+                        found = true;
+
+                        System.out.println("\nwould you like to return this book? (Y/N)");
+                        String answer = input.scanString();
+
+                        if (answer.toLowerCase().equals("y")) {
+                            ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
+
+                            returnRequests.add(new Borrow(id, book.getTitle()));
+                            fileHandler.saveReturnRequests(returnRequests);
+
+                            System.out.println("request submitted successfully.");
+                        }
+
+                        found = true;
+                    }
+                }
+            }
+        }
+
+        if (!found) {
+            System.out.println("\nthere is no unreturned book");
+        }
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printStudentMenu(library, input, id);
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
+    }
+
     public void unreturnedBookList(Library library, Input input, int id) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
@@ -237,7 +297,7 @@ public class Library {
 
         System.out.println("unreturned book list:");
         for (Borrow request : requests) {
-            if (request.isApproved()==true) {
+            if (request.isApproved() == true) {
                 Book book = findBookByTitle(books, request.getBookTitle());
 
                 if (book != null) {
@@ -274,11 +334,11 @@ public class Library {
         }
     }
 
-    public void showPendingRequests(Library library,Input input, int assistantId) {
+    public void showPendingRequests(Library library, Input input, int assistantId) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
-        int studentId =0;
+        int studentId = 0;
 
         System.out.println("\nborrow requests");
         for (Borrow request : requests) {
@@ -327,7 +387,7 @@ public class Library {
             }
         }
         if (!found)
-        System.out.println("request not found or already approved");
+            System.out.println("request not found or already approved");
 
         System.out.println("\n1.menu");
         System.out.println("2.exit");

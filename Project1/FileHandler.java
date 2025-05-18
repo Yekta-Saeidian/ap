@@ -11,6 +11,7 @@ public class FileHandler {
     private final String STUDENTS_FILE = "students.txt";
     private final String ASSISTANTS_FILE = "assistants.txt";
     private final String BORROW_REQUESTS_FILE = "borrowRequests.txt";
+    private final String RETURN_REQUESTS_FILE = "returnRequests.txt";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
@@ -32,7 +33,7 @@ public class FileHandler {
     }
 
     public void saveStudents(ArrayList<Student> students) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(STUDENTS_FILE , true))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(STUDENTS_FILE, true))) {
             for (Student student : students) {
                 writer.println(student.getFirstName() + "," +
                         student.getLastName() + "," +
@@ -74,6 +75,26 @@ public class FileHandler {
                             (borrow.getDueDate() != null ? borrow.getDueDate() : "null") + "," +
                             (borrow.getReturnDate() != null ? borrow.getReturnDate() : "null") + "," +
                             borrow.isApproved());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving borrow requests: " + e.getMessage());
+        }
+    }
+
+    public void saveReturnRequests(ArrayList<Borrow> returnRequests) {
+        try {
+            new PrintWriter(RETURN_REQUESTS_FILE).close();
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(RETURN_REQUESTS_FILE))) {
+                for (Borrow returns : returnRequests) {
+                    writer.println(returns.getStudentId() + "," +
+                            returns.getBookTitle() + "," +
+                            (returns.isApproved() ? returns.getAssistantId() : "null") + "," +
+                            (returns.getBorrowDate() != null ? returns.getBorrowDate() : "null") + "," +
+                            (returns.getDueDate() != null ? returns.getDueDate() : "null") + "," +
+                            (returns.getReturnDate() != null ? returns.getReturnDate() : "null") + "," +
+                            returns.isApproved());
                 }
             }
         } catch (IOException e) {
@@ -180,5 +201,34 @@ public class FileHandler {
             System.err.println("Error loading borrow requests: " + e.getMessage());
         }
         return borrows;
+    }
+
+    public ArrayList<Borrow> loadReturnRequests() {
+        ArrayList<Borrow> returnss = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(RETURN_REQUESTS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    Borrow returns = new Borrow(
+                            Integer.parseInt(parts[0].trim()),
+                            parts[1].trim());
+
+                    if (parts.length > 2 && !parts[2].equals("null")) {
+                        returns.approveRequest(Integer.parseInt(parts[2].trim()));
+                        returns.setBorrowDate(LocalDate.parse(parts[3]));
+                        returns.setDueDate(LocalDate.parse(parts[4]));
+                        if (!parts[5].equals("null")) {
+                            returns.setReturnDate(LocalDate.parse(parts[5]));
+                        }
+                    }
+                    returnss.add(returns);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading borrow requests: " + e.getMessage());
+        }
+        return returnss;
     }
 }

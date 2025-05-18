@@ -60,7 +60,26 @@ public class Menu {
         System.out.println("4.most borrowed books list");
         System.out.println("5.exit");
 
-        managerOption(library, input);
+        while (true) {
+
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    library.addLibraryAssistant(library, input);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        }
     }
 
     public void printLibraryAssistantMenu(Library library, Input input, int assistantId) {
@@ -111,33 +130,10 @@ public class Menu {
                     library.unreturnedBookList(library, input, id);
                     break;
                 case 3:
+                    library.returnBookRequest(library, input, id);
                     break;
                 case 4:
                     return;
-                default:
-                    System.out.println("Invalid option");
-                    break;
-            }
-        }
-    }
-
-    public int managerOption(Library library, Input input) {
-
-        while (true) {
-
-            option = input.scanInt();
-            switch (option) {
-                case 1:
-                    library.addLibraryAssistant(library, input);
-                    return 1;
-                case 2:
-                    return 1;
-                case 3:
-                    return 1;
-                case 4:
-                    return 1;
-                case 5:
-                    return 0;
                 default:
                     System.out.println("Invalid option");
                     break;
