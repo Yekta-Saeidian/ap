@@ -8,6 +8,7 @@ public class Library {
     private ArrayList<Book> books;
     private ArrayList<Student> students;
     private ArrayList<LibraryAssistant> assistants;
+    private ArrayList<Borrow> borrows;
 
     Input input = new Input();
     Menu menu = new Menu();
@@ -23,6 +24,7 @@ public class Library {
         this.books = new ArrayList<>();
         this.students = new ArrayList<>();
         this.assistants = new ArrayList<>();
+        this.borrows = new ArrayList<>();
     }
 
     public ArrayList<Student> getStudents() {
@@ -78,7 +80,7 @@ public class Library {
         }
     }
 
-    public int addBook(Library library, Input input) {
+    public int addBook(Library library, Input input, int assistantID) {
         int option = 0;
 
         System.out.println("book title:");
@@ -101,7 +103,7 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    addBook(library, input);
+                    addBook(library, input, assistantID);
                     break;
                 case 2:
                     fileHandler.saveBooks(books);
@@ -114,7 +116,7 @@ public class Library {
                         option = input.scanInt();
                         switch (option) {
                             case 1:
-                                menu.printLibraryAssistantMenu(library, input);
+                                menu.printLibraryAssistantMenu(library, input , assistantID);
                                 return 1;
                             case 2:
                                 return 0;
@@ -190,11 +192,13 @@ public class Library {
                     String answer = input.scanString();
 
                     if (answer.toLowerCase().equals("y")) {
-                        System.out.println("request submitted successfully.");
-                        borrowRequest(library, input, bookTitle, id);
+                        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
 
-                    } else
-                        break;
+                        requests.add(new Borrow(id, book.getTitle()));
+                        fileHandler.saveBorrowRequests(requests);
+
+                        System.out.println("request submitted successfully.");
+                    }
                 }
 
                 found = true;
@@ -224,29 +228,74 @@ public class Library {
         }
     }
 
-    public void borrowRequest(Library library, Input input, String bookTitle, int id) {
-        FileHandler fileHandler = new FileHandler();
+    public void showPendingRequests(Input input, int assistantId) {
+        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Student> students = fileHandler.loadStudents();
+        int studentId =0;
 
-        System.out.println("\nborrow request:");
-        for (Book book : fileHandler.loadBooks()) {
-            if (book.getTitle().toLowerCase().contains(bookTitle)) {
+        System.out.println("\nborrow requests");
+        for (Borrow request : requests) {
+            if (!request.isApproved()) {
+                Student student = findStudentById(students, request.getStudentId());
+                Book book = findBookByTitle(books, request.getBookTitle());
 
-                System.out.println("book title:" + book.getTitle());
-                System.out.println("book author:" + book.getAuthor());
-                System.out.println("book year of publication:" + book.getYearOfPublication());
-                System.out.println("book pages:" + book.getPages());
+                if (student != null && book != null) {
+                    System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
+                    System.out.println("student id: " + request.getStudentId());
+                    studentId = request.getStudentId();
+                    System.out.println("book title: " + book.getTitle());
+                }
             }
         }
 
-        System.out.println("\nrequester:");
-        for (Student student : fileHandler.loadStudents()) {
-            if (id == student.getId()) {
-                System.out.println("name: " + student.getFirstName() + " " + student.getLastName());
-                System.out.println("id: " + student.getId());
-                System.out.println("field: " + student.getField());
-                System.out.println("date of membership: " + student.getDateOfMembership());
-            }
+        System.out.println("\ndo you approve? (Y/N)");
+        String answer = input.scanString();
+
+        if (answer.toLowerCase().equals("y")) {
+            approveRequest(studentId, assistantId);
         }
     }
 
+    private void approveRequest(int studentId, int assistantId) {
+        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Book> books = fileHandler.loadBooks();
+
+        for (Borrow request : requests) {
+            if (request.getStudentId() == studentId && !request.isApproved()) {
+                request.approveRequest(assistantId);
+
+                for (Book book : books) {
+                    if (book.getTitle().equalsIgnoreCase(request.getBookTitle())) {
+                        book.setBorrowedTrue();
+                        break;
+                    }
+                }
+
+                fileHandler.saveBorrowRequests(requests);
+                fileHandler.saveBooks(books);
+                System.out.println("your approval has been submitted successfully");
+                return;
+            }
+        }
+        System.out.println("request not found or already approved");
+    }
+
+    private Student findStudentById(ArrayList<Student> students, int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    private Book findBookByTitle(ArrayList<Book> books, String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
+            }
+        }
+        return null;
+    }
 }

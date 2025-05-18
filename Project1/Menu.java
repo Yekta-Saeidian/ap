@@ -11,7 +11,7 @@ public class Menu {
 
         for (Student student : fileHandler.loadStudents()) {
             if (id == student.getId()) {
-                printStudentMenu(library, input , id);
+                printStudentMenu(library, input, id);
                 found = true;
                 return 1;
             }
@@ -20,7 +20,7 @@ public class Menu {
         if (!found) {
             for (LibraryAssistant libraryAssistant : fileHandler.loadAssistants()) {
                 if (id == libraryAssistant.getId()) {
-                    printLibraryAssistantMenu(library, input);
+                    printLibraryAssistantMenu(library, input , id);
                     found = true;
                     return 1;
                 }
@@ -63,13 +63,35 @@ public class Menu {
         managerOption(library, input);
     }
 
-    public void printLibraryAssistantMenu(Library library, Input input) {
+    public void printLibraryAssistantMenu(Library library, Input input, int assistantId) {
 
         System.out.println("1.edit personal information");
         System.out.println("2.add new book");
-        System.out.println("3.exit");
+        System.out.println("3.confirmation of book borrowing");
+        System.out.println("4.book return confirmation");
+        System.out.println("5.exit");
 
-        libraryAssistantOption(library, input);
+        int option = input.scanInt();
+
+        while (option != 5) {
+            switch (option) {
+                case 1:
+                    break;
+                case 2:
+                    library.addBook(library, input, assistantId);
+                    break;
+                case 3:
+                    library.showPendingRequests(input, assistantId);
+                    printLibraryAssistantMenu(library, input, assistantId);
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("invalid selection");
+            }
+        }
     }
 
     public void printStudentMenu(Library library, Input input, int id) {
@@ -79,7 +101,7 @@ public class Menu {
         System.out.println("3.return book");
         System.out.println("4.exit");
 
-        studentOption(library, input , id);
+        studentOption(library, input, id);
     }
 
     public int managerOption(Library library, Input input) {
@@ -98,26 +120,6 @@ public class Menu {
                 case 4:
                     return 1;
                 case 5:
-                    return 0;
-                default:
-                    System.out.println("Invalid option");
-                    break;
-            }
-        }
-    }
-
-    public int libraryAssistantOption(Library library, Input input) {
-
-        while (true) {
-
-            option = input.scanInt();
-            switch (option) {
-                case 1:
-                    return 1;
-                case 2:
-                    library.addBook(library, input);
-                    return 1;
-                case 3:
                     return 0;
                 default:
                     System.out.println("Invalid option");

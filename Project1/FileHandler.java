@@ -10,6 +10,7 @@ public class FileHandler {
     private final String BOOKS_FILE = "books.txt";
     private final String STUDENTS_FILE = "students.txt";
     private final String ASSISTANTS_FILE = "assistants.txt";
+    private final String BORROW_REQUESTS_FILE = "borrowRequests.txt";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
@@ -49,6 +50,22 @@ public class FileHandler {
             }
         } catch (IOException e) {
             System.err.println("Error saving assistants to file: " + e.getMessage());
+        }
+    }
+
+    public void saveBorrowRequests(ArrayList<Borrow> borrows) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(BORROW_REQUESTS_FILE))) {
+            for (Borrow borrow : borrows) {
+                writer.println(borrow.getStudentId() + "," +
+                        borrow.getBookTitle() + "," +
+                        (borrow.isApproved() ? borrow.getAssistantId() : "null") + "," +
+                        (borrow.getBorrowDate() != null ? borrow.getBorrowDate() : "null") + "," +
+                        (borrow.getDueDate() != null ? borrow.getDueDate() : "null") + "," +
+                        (borrow.getReturnDate() != null ? borrow.getReturnDate() : "null") + "," +
+                        borrow.isApproved());
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving borrow requests: " + e.getMessage());
         }
     }
 
@@ -122,5 +139,34 @@ public class FileHandler {
             System.err.println("Error loading assistants from file: " + e.getMessage());
         }
         return assistants;
+    }
+
+    public ArrayList<Borrow> loadBorrowRequests() {
+        ArrayList<Borrow> borrows = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(BORROW_REQUESTS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    Borrow borrow = new Borrow(
+                            Integer.parseInt(parts[0].trim()),
+                            parts[1].trim());
+
+                    if (parts.length > 2 && !parts[2].equals("null")) {
+                        borrow.approveRequest(Integer.parseInt(parts[2].trim()));
+                        borrow.setBorrowDate(LocalDate.parse(parts[3]));
+                        borrow.setDueDate(LocalDate.parse(parts[4]));
+                        if (!parts[5].equals("null")) {
+                            borrow.setReturnDate(LocalDate.parse(parts[5]));
+                        }
+                    }
+                    borrows.add(borrow);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading borrow requests: " + e.getMessage());
+        }
+        return borrows;
     }
 }

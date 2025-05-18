@@ -34,4 +34,12 @@ public class Book {
     public boolean isBorrowed() {
         return borrowed;
     }
+
+    public void setBorrowedTrue() {
+        this.borrowed=true;
+    }
+
+    public void setBorrowedFalse() {
+        this.borrowed=false;
+    }
 }
