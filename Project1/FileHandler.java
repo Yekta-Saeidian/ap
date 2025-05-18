@@ -187,7 +187,7 @@ public class FileHandler {
                             parts[1].trim());
 
                     if (parts.length > 2 && !parts[2].equals("null")) {
-                        borrow.approveRequest(Integer.parseInt(parts[2].trim()));
+                        borrow.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
                         borrow.setBorrowDate(LocalDate.parse(parts[3]));
                         borrow.setDueDate(LocalDate.parse(parts[4]));
                         if (!parts[5].equals("null")) {
@@ -216,7 +216,7 @@ public class FileHandler {
                             parts[1].trim());
 
                     if (parts.length > 2 && !parts[2].equals("null")) {
-                        returns.approveRequest(Integer.parseInt(parts[2].trim()));
+                        returns.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
                         returns.setBorrowDate(LocalDate.parse(parts[3]));
                         returns.setDueDate(LocalDate.parse(parts[4]));
                         if (!parts[5].equals("null")) {

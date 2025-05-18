@@ -45,10 +45,16 @@ public class Borrow {
         return approved;
     }
 
-    public void approveRequest(int assistantId) {
+    public void approveBorrowRequest(int assistantId) {
         this.assistantId = assistantId;
         this.borrowDate = LocalDate.now();
         this.dueDate = borrowDate.plusWeeks(2);
+        this.approved = true;
+    }
+
+    public void approveReturnRequest(int assistantId) {
+        this.assistantId = assistantId;
+        this.returnDate = LocalDate.now();
         this.approved = true;
     }
 
@@ -61,10 +67,6 @@ public class Borrow {
     }
 
     public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = LocalDate.now();
-    }
-
-    public void returnBook() {
         this.returnDate = LocalDate.now();
     }
 }

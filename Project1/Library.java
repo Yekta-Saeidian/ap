@@ -334,23 +334,45 @@ public class Library {
         }
     }
 
-    public void showPendingRequests(Library library, Input input, int assistantId) {
+    public void showPendingRequests(Library library, Input input, int assistantId, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
         int studentId = 0;
 
-        System.out.println("\nborrow requests");
-        for (Borrow request : requests) {
-            if (!request.isApproved()) {
-                Student student = findStudentById(students, request.getStudentId());
-                Book book = findBookByTitle(books, request.getBookTitle());
+        if (option == 3) {
+            System.out.println("\nborrow requests");
 
-                if (student != null && book != null) {
-                    System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
-                    System.out.println("student id: " + request.getStudentId());
-                    studentId = request.getStudentId();
-                    System.out.println("book title: " + book.getTitle());
+            for (Borrow request : requests) {
+                if (!request.isApproved()) {
+                    Student student = findStudentById(students, request.getStudentId());
+                    Book book = findBookByTitle(books, request.getBookTitle());
+
+                    if (student != null && book != null) {
+                        System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
+                        System.out.println("student id: " + request.getStudentId());
+                        studentId = request.getStudentId();
+                        System.out.println("book title: " + book.getTitle());
+                    }
+                }
+            }
+        }
+
+        if (option == 4) {
+            System.out.println("\nreturn requests");
+
+            for (Borrow request : returnRequests) {
+                if (!request.isApproved()) {
+                    Student student = findStudentById(students, request.getStudentId());
+                    Book book = findBookByTitle(books, request.getBookTitle());
+
+                    if (student != null && book != null) {
+                        System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
+                        System.out.println("student id: " + request.getStudentId());
+                        studentId = request.getStudentId();
+                        System.out.println("book title: " + book.getTitle());
+                    }
                 }
             }
         }
@@ -359,39 +381,64 @@ public class Library {
         String answer = input.scanString();
 
         if (answer.toLowerCase().equals("y")) {
-            approveRequest(studentId, assistantId, library, input);
+            approveRequest(studentId, assistantId, library, input, option);
         }
     }
 
-    private void approveRequest(int studentId, int assistantId, Library library, Input input) {
+    private void approveRequest(int studentId, int assistantId, Library library, Input input, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         boolean found = false;
 
-        for (Borrow request : requests) {
-            if (request.getStudentId() == studentId && !request.isApproved()) {
-                request.approveRequest(assistantId);
+        if(option==3) {
+            for (Borrow request : requests) {
+                if (request.getStudentId() == studentId && !request.isApproved()) {
+                    request.approveBorrowRequest(assistantId);
 
-                for (Book book : books) {
-                    if (book.getTitle().equalsIgnoreCase(request.getBookTitle())) {
-                        book.setBorrowedTrue();
-                        break;
+                    for (Book book : books) {
+                        if (book.getTitle().equalsIgnoreCase(request.getBookTitle())) {
+                            book.setBorrowedTrue();
+                            break;
+                        }
                     }
+
+                    fileHandler.saveBorrowRequests(requests);
+                    fileHandler.saveBooks(books);
+                    System.out.println("your approval has been submitted successfully");
+
+                    found = true;
                 }
-
-                fileHandler.saveBorrowRequests(requests);
-                fileHandler.saveBooks(books);
-                System.out.println("your approval has been submitted successfully");
-
-                found = true;
             }
         }
+
+        if(option==4) {
+            for (Borrow request : returnRequests) {
+                if (request.getStudentId() == studentId && !request.isApproved()) {
+                    request.approveReturnRequest(assistantId);
+
+                    for (Book book : books) {
+                        if (book.getTitle().equalsIgnoreCase(request.getBookTitle())) {
+                            book.setBorrowedFalse();
+                            break;
+                        }
+                    }
+
+                    fileHandler.saveReturnRequests(returnRequests);
+                    fileHandler.saveBooks(books);
+                    System.out.println("your approval has been submitted successfully");
+
+                    found = true;
+                }
+            }
+        }
+
         if (!found)
             System.out.println("request not found or already approved");
 
         System.out.println("\n1.menu");
         System.out.println("2.exit");
-        int option = 0;
+        option = 0;
         while (true) {
             option = input.scanInt();
             switch (option) {

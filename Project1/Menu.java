@@ -100,9 +100,10 @@ public class Menu {
                     library.addBook(library, input, assistantId);
                     break;
                 case 3:
-                    library.showPendingRequests(library, input, assistantId);
+                    library.showPendingRequests(library, input, assistantId , option);
                     break;
                 case 4:
+                    library.showPendingRequests(library, input, assistantId , option);
                     break;
                 case 5:
                     return;
