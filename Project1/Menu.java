@@ -20,7 +20,7 @@ public class Menu {
         if (!found) {
             for (LibraryAssistant libraryAssistant : fileHandler.loadAssistants()) {
                 if (id == libraryAssistant.getId()) {
-                    printLibraryAssistantMenu(library, input , id);
+                    printLibraryAssistantMenu(library, input, id);
                     found = true;
                     return 1;
                 }
@@ -81,8 +81,7 @@ public class Menu {
                     library.addBook(library, input, assistantId);
                     break;
                 case 3:
-                    library.showPendingRequests(input, assistantId);
-                    printLibraryAssistantMenu(library, input, assistantId);
+                    library.showPendingRequests(library, input, assistantId);
                     break;
                 case 4:
                     break;
@@ -101,7 +100,25 @@ public class Menu {
         System.out.println("3.return book");
         System.out.println("4.exit");
 
-        studentOption(library, input, id);
+        while (true) {
+
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    library.searchBook(library, input, id);
+                    break;
+                case 2:
+                    library.unreturnedBookList(library, input, id);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        }
     }
 
     public int managerOption(Library library, Input input) {
@@ -120,28 +137,6 @@ public class Menu {
                 case 4:
                     return 1;
                 case 5:
-                    return 0;
-                default:
-                    System.out.println("Invalid option");
-                    break;
-            }
-        }
-    }
-
-    public int studentOption(Library library, Input input, int id) {
-
-        while (true) {
-
-            option = input.scanInt();
-            switch (option) {
-                case 1:
-                    library.searchBook(library, input, id);
-                    return 1;
-                case 2:
-                    return 1;
-                case 3:
-                    return 1;
-                case 4:
                     return 0;
                 default:
                     System.out.println("Invalid option");

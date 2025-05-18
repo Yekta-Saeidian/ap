@@ -43,7 +43,8 @@ public class Library {
         System.out.println("ID:");
         int id = input.scanInt();
 
-        assistants.add(new LibraryAssistant(firstName, lastName, id));
+        ArrayList<LibraryAssistant> currentAssistants = fileHandler.loadAssistants();
+        currentAssistants.add(new LibraryAssistant(firstName, lastName, id));
 
         System.out.println("\n1.add more assistants");
         System.out.println("2.save");
@@ -54,7 +55,7 @@ public class Library {
                     addLibraryAssistant(library, input);
                     break;
                 case 2:
-                    fileHandler.saveAssistants(assistants);
+                    fileHandler.saveAssistants(currentAssistants);
                     System.out.println("new assistant added successfully\n");
 
                     System.out.println("1.menu");
@@ -95,7 +96,8 @@ public class Library {
         System.out.println("number of pages:");
         int pages = input.scanInt();
 
-        books.add(new Book(title, author, yearOfPublication, pages, false));
+        ArrayList<Book> currentBooks = fileHandler.loadBooks();
+        currentBooks.add(new Book(title, author, yearOfPublication, pages, false));
 
         System.out.println("\n1.add more books");
         System.out.println("2.save");
@@ -106,7 +108,7 @@ public class Library {
                     addBook(library, input, assistantID);
                     break;
                 case 2:
-                    fileHandler.saveBooks(books);
+                    fileHandler.saveBooks(currentBooks);
                     System.out.println("new book added successfully\n");
 
                     System.out.println("1.menu");
@@ -173,7 +175,7 @@ public class Library {
     }
 
     public int searchBook(Library library, Input input, int id) {
-        System.out.println("enter the book title::");
+        System.out.println("enter the book title: ");
         String bookTitle = input.scanString().toLowerCase();
         boolean found = false;
 
@@ -228,7 +230,51 @@ public class Library {
         }
     }
 
-    public void showPendingRequests(Input input, int assistantId) {
+    public void unreturnedBookList(Library library, Input input, int id) {
+        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Book> books = fileHandler.loadBooks();
+        boolean found = false;
+
+        System.out.println("unreturned book list:");
+        for (Borrow request : requests) {
+            if (request.isApproved()==true) {
+                Book book = findBookByTitle(books, request.getBookTitle());
+
+                if (book != null) {
+                    System.out.println("\nbook title:" + book.getTitle());
+                    System.out.println("book author:" + book.getAuthor());
+                    System.out.println("book year of publication:" + book.getYearOfPublication());
+                    System.out.println("book pages:" + book.getPages());
+                    found = true;
+                }
+
+            }
+        }
+
+        if (!found) {
+            System.out.println("\nthere is no unreturned book");
+        }
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printStudentMenu(library, input, id);
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
+    }
+
+    public void showPendingRequests(Library library,Input input, int assistantId) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
@@ -253,13 +299,14 @@ public class Library {
         String answer = input.scanString();
 
         if (answer.toLowerCase().equals("y")) {
-            approveRequest(studentId, assistantId);
+            approveRequest(studentId, assistantId, library, input);
         }
     }
 
-    private void approveRequest(int studentId, int assistantId) {
+    private void approveRequest(int studentId, int assistantId, Library library, Input input) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
+        boolean found = false;
 
         for (Borrow request : requests) {
             if (request.getStudentId() == studentId && !request.isApproved()) {
@@ -275,10 +322,29 @@ public class Library {
                 fileHandler.saveBorrowRequests(requests);
                 fileHandler.saveBooks(books);
                 System.out.println("your approval has been submitted successfully");
-                return;
+
+                found = true;
             }
         }
+        if (!found)
         System.out.println("request not found or already approved");
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printLibraryAssistantMenu(library, input, assistantId);
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+        }
     }
 
     private Student findStudentById(ArrayList<Student> students, int id) {

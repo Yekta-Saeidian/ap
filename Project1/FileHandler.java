@@ -14,13 +14,17 @@ public class FileHandler {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(BOOKS_FILE , true))) {
-            for (Book book : books) {
-                writer.println(book.getTitle() + "," +
-                        book.getAuthor() + "," +
-                        book.getYearOfPublication() + "," +
-                        book.getPages() + "," +
-                        book.isBorrowed());
+        try {
+            new PrintWriter(BOOKS_FILE).close();
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(BOOKS_FILE))) {
+                for (Book book : books) {
+                    writer.println(book.getTitle() + "," +
+                            book.getAuthor() + "," +
+                            book.getYearOfPublication() + "," +
+                            book.getPages() + "," +
+                            book.isBorrowed());
+                }
             }
         } catch (IOException e) {
             System.err.println("Error saving books to file: " + e.getMessage());
@@ -42,11 +46,15 @@ public class FileHandler {
     }
 
     public void saveAssistants(ArrayList<LibraryAssistant> assistants) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(ASSISTANTS_FILE , true))) {
-            for (LibraryAssistant assistant : assistants) {
-                writer.println(assistant.getFirstName() + "," +
-                        assistant.getLastName() + "," +
-                        assistant.getId());
+        try {
+            new PrintWriter(ASSISTANTS_FILE).close();
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(ASSISTANTS_FILE))) {
+                for (LibraryAssistant assistant : assistants) {
+                    writer.println(assistant.getFirstName() + "," +
+                            assistant.getLastName() + "," +
+                            assistant.getId());
+                }
             }
         } catch (IOException e) {
             System.err.println("Error saving assistants to file: " + e.getMessage());
@@ -54,15 +62,19 @@ public class FileHandler {
     }
 
     public void saveBorrowRequests(ArrayList<Borrow> borrows) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(BORROW_REQUESTS_FILE))) {
-            for (Borrow borrow : borrows) {
-                writer.println(borrow.getStudentId() + "," +
-                        borrow.getBookTitle() + "," +
-                        (borrow.isApproved() ? borrow.getAssistantId() : "null") + "," +
-                        (borrow.getBorrowDate() != null ? borrow.getBorrowDate() : "null") + "," +
-                        (borrow.getDueDate() != null ? borrow.getDueDate() : "null") + "," +
-                        (borrow.getReturnDate() != null ? borrow.getReturnDate() : "null") + "," +
-                        borrow.isApproved());
+        try {
+            new PrintWriter(BORROW_REQUESTS_FILE).close();
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(BORROW_REQUESTS_FILE))) {
+                for (Borrow borrow : borrows) {
+                    writer.println(borrow.getStudentId() + "," +
+                            borrow.getBookTitle() + "," +
+                            (borrow.isApproved() ? borrow.getAssistantId() : "null") + "," +
+                            (borrow.getBorrowDate() != null ? borrow.getBorrowDate() : "null") + "," +
+                            (borrow.getDueDate() != null ? borrow.getDueDate() : "null") + "," +
+                            (borrow.getReturnDate() != null ? borrow.getReturnDate() : "null") + "," +
+                            borrow.isApproved());
+                }
             }
         } catch (IOException e) {
             System.err.println("Error saving borrow requests: " + e.getMessage());
