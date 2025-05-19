@@ -52,7 +52,7 @@ public class Menu {
         return 0;
     }
 
-    public void printManagerMenu(Library library, Input input) {
+    public boolean printManagerMenu(Library library, Input input) {
 
         System.out.println("1.add library assistant");
         System.out.println("2.overdue books list");
@@ -77,7 +77,7 @@ public class Menu {
                     library.showMostBorrowedBooks(library, input);
                     break;
                 case 5:
-                    return;
+                    return true;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -85,7 +85,7 @@ public class Menu {
         }
     }
 
-    public void printLibraryAssistantMenu(Library library, Input input, int assistantId) {
+    public boolean printLibraryAssistantMenu(Library library, Input input, int assistantId) {
 
         System.out.println("1.edit personal information");
         System.out.println("2.add new book");
@@ -94,7 +94,7 @@ public class Menu {
         System.out.println("5.exit");
 
 
-        do {
+        while (true) {
             int option = input.scanInt();
             switch (option) {
                 case 1:
@@ -103,20 +103,20 @@ public class Menu {
                     library.addBook(library, input, assistantId);
                     break;
                 case 3:
-                    library.showPendingRequests(library, input, assistantId , option);
+                    library.showPendingRequests(library, input, assistantId, option);
                     break;
                 case 4:
-                    library.showPendingRequests(library, input, assistantId , option);
+                    library.showPendingRequests(library, input, assistantId, option);
                     break;
                 case 5:
-                    return;
+                    return true;
                 default:
                     System.out.println("invalid selection");
             }
-        } while (option != 5);
+        }
     }
 
-    public void printStudentMenu(Library library, Input input, int id) {
+    public boolean printStudentMenu(Library library, Input input, int id) {
 
         System.out.println("1.search book");
         System.out.println("2.unreturned book list");
@@ -137,7 +137,7 @@ public class Menu {
                     library.returnBookRequest(library, input, id);
                     break;
                 case 4:
-                    return;
+                    return true;
                 default:
                     System.out.println("Invalid option");
                     break;

@@ -7,12 +7,12 @@ public class Book {
     private int pages;
     private boolean borrowed;
 
-    public Book(String title , String author , int yearOfPublication , int pages , boolean borrowed) {
-        this.title=title;
-        this.author=author;
-        this.yearOfPublication=yearOfPublication;
-        this.pages=pages;
-        this.borrowed=borrowed;
+    public Book(String title, String author, int yearOfPublication, int pages, boolean borrowed) {
+        this.title = title;
+        this.author = author;
+        this.yearOfPublication = yearOfPublication;
+        this.pages = pages;
+        this.borrowed = borrowed;
     }
 
     public String getTitle() {
@@ -36,10 +36,10 @@ public class Book {
     }
 
     public void setBorrowedTrue() {
-        this.borrowed=true;
+        this.borrowed = true;
     }
 
     public void setBorrowedFalse() {
-        this.borrowed=false;
+        this.borrowed = false;
     }
 }

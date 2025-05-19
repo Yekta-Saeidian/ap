@@ -32,7 +32,7 @@ public class Library {
         return students;
     }
 
-    public int addLibraryAssistant(Library library, Input input) {
+    public boolean addLibraryAssistant(Library library, Input input) {
         int option = 0;
 
         System.out.println("first name:");
@@ -66,10 +66,9 @@ public class Library {
                         option = input.scanInt();
                         switch (option) {
                             case 1:
-                                menu.printManagerMenu(library, input);
-                                return 1;
+                                return true;
                             case 2:
-                                return 0;
+                                return false;
                             default:
                                 System.out.println("invalid option");
                                 break;
@@ -82,7 +81,7 @@ public class Library {
         }
     }
 
-    public int addBook(Library library, Input input, int assistantID) {
+    public boolean addBook(Library library, Input input, int assistantID) {
         int option = 0;
 
         System.out.println("book title:");
@@ -119,10 +118,9 @@ public class Library {
                         option = input.scanInt();
                         switch (option) {
                             case 1:
-                                menu.printLibraryAssistantMenu(library, input, assistantID);
-                                return 1;
+                                return true;
                             case 2:
-                                return 0;
+                                return false;
                             default:
                                 System.out.println("invalid option");
                                 break;
@@ -136,7 +134,7 @@ public class Library {
 
     }
 
-    public int register(Library library, Input input) {
+    public boolean register(Library library, Input input) {
 
         System.out.println("first name:");
         String firstName = input.scanString();
@@ -163,10 +161,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input, id);
-                    return 1;
+                    return true;
                 case 2:
-                    return 0;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -175,7 +172,7 @@ public class Library {
         }
     }
 
-    public int searchBook(Library library, Input input, int id) {
+    public boolean searchBook(Library library, Input input, int id) {
         System.out.println("enter the book title: ");
         String bookTitle = input.scanString().toLowerCase();
         boolean found = false;
@@ -219,10 +216,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input, id);
-                    return 1;
+                    return true;
                 case 2:
-                    return 0;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -231,7 +227,7 @@ public class Library {
         }
     }
 
-    public void returnBookRequest(Library library, Input input, int id) {
+    public boolean returnBookRequest(Library library, Input input, int id) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
@@ -279,10 +275,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input, id);
-                    break;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -291,7 +286,7 @@ public class Library {
         }
     }
 
-    public void unreturnedBookList(Library library, Input input, int id) {
+    public boolean unreturnedBookList(Library library, Input input, int id) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         boolean found = false;
@@ -323,10 +318,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printStudentMenu(library, input, id);
-                    break;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -335,7 +329,7 @@ public class Library {
         }
     }
 
-    public void overdueBooksList(Library library, Input input) {
+    public boolean overdueBooksList(Library library, Input input) {
         ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
@@ -391,10 +385,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
-                    break;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -403,7 +396,7 @@ public class Library {
         }
     }
 
-    public void showAssistantsReport(Library library, Input input) {
+    public boolean showAssistantsReport(Library library, Input input) {
         ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
         ArrayList<LibraryAssistant> assistants = fileHandler.loadAssistants();
 
@@ -437,10 +430,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
-                    break;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;
@@ -449,7 +441,7 @@ public class Library {
         }
     }
 
-    public void showMostBorrowedBooks(Library library, Input input) {
+    public boolean showMostBorrowedBooks(Library library, Input input) {
         ArrayList<Borrow> transactions = fileHandler.loadTransactionsHistory();
         ArrayList<Book> books = fileHandler.loadBooks();
 
@@ -522,10 +514,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printManagerMenu(library, input);
-                    return;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -533,7 +524,7 @@ public class Library {
         }
     }
 
-    public void showPendingRequests(Library library, Input input, int assistantId, int option) {
+    public boolean showPendingRequests(Library library, Input input, int assistantId, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
@@ -597,9 +588,23 @@ public class Library {
 
         if (!found)
             System.out.println("request not found or already approved");
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        while (true) {
+            int choice = input.scanInt();
+            switch (choice) {
+                case 1:
+                    return true;
+                case 2:
+                    return false;
+                default:
+                    System.out.println("invalid option");
+            }
+        }
     }
 
-    private void approveRequest(int studentId, int assistantId, Library library, Input input, int option) {
+    private boolean approveRequest(int studentId, int assistantId, Library library, Input input, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
@@ -673,10 +678,9 @@ public class Library {
             option = input.scanInt();
             switch (option) {
                 case 1:
-                    menu.printLibraryAssistantMenu(library, input, assistantId);
-                    break;
+                    return true;
                 case 2:
-                    return;
+                    return false;
                 default:
                     System.out.println("invalid option");
                     break;

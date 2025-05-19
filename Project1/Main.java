@@ -12,14 +12,15 @@ public class Main {
         System.out.println("1.Manager");
         System.out.println("2.Library Assistant");
         System.out.println("3.Student");
+        System.out.println("4.exit");
 
-        int option1 = 0;
-        int option2 = 0;
+        boolean exitProgram = false;
 
-        while (option2 != 1 || option2 != 2 || option2 != 3) {
+        while (!exitProgram) {
 
-            option1 = input.scanInt();
-            switch (option1) {
+            int option = input.scanInt();
+
+            switch (option) {
                 case 1:
                     menu.printManagerMenu(library, input);
                     break;
@@ -29,20 +30,21 @@ public class Main {
                 case 3:
                     System.out.println("1.register");
                     System.out.println("2.log in");
-                    while (option1 != 1 && option1 != 2) {
-                        option2 = input.scanInt();
-                        switch (option2) {
-                            case 1:
-                                library.register(library, input);
-                                break;
-                            case 2:
-                                menu.logIn(library, input);
-                                break;
-                            default:
-                                System.out.println("Invalid option");
-                                break;
-                        }
+
+                    int studentOption = input.scanInt();
+                    switch (studentOption) {
+                        case 1:
+                            library.register(library, input);
+                            break;
+                        case 2:
+                            menu.logIn(library, input);
+                            break;
+                        default:
+                            System.out.println("Invalid option");
                     }
+                    break;
+                case 4:
+                    exitProgram = true;
                     break;
                 default:
                     System.out.println("Invalid option");
