@@ -336,33 +336,46 @@ public class Library {
     }
 
     public void overdueBooksList(Library library, Input input) {
-        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
         boolean found = false;
 
         System.out.println("overdue book list:");
-        for (Borrow request : requests) {
-            if (request.isApproved() == true) {
+
+        for (Borrow transaction : allTransactions) {
+            if (transaction.isApproved() && transaction.getBorrowDate() != null) {
+                LocalDate dueDate = transaction.getDueDate();
+                LocalDate returnDate = transaction.getReturnDate();
                 LocalDate currentDate = LocalDate.now();
 
-                if (currentDate.isAfter(request.getDueDate())) {
-                    Book book = findBookByTitle(books, request.getBookTitle());
-                    Student student = findStudentById(students, request.getStudentId());
+                boolean isOverdue = (returnDate != null && returnDate.isAfter(dueDate)) ||
+                        (returnDate == null && currentDate.isAfter(dueDate));
+
+                if (isOverdue) {
+                    Book book = findBookByTitle(books, transaction.getBookTitle());
+                    Student student = findStudentById(students, transaction.getStudentId());
 
                     if (student != null && book != null) {
-                        System.out.println("\nbook title: " + book.getTitle());
-                        System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
-                        System.out.println("student id: " + request.getStudentId());
-                        System.out.println("date of borrow: " + request.getBorrowDate());
-                        System.out.println("date of due: " + request.getDueDate());
+                        System.out.println("\nBook Title: " + book.getTitle());
+                        System.out.println("Student Name: " + student.getFirstName() + " " + student.getLastName());
+                        System.out.println("Student ID: " + transaction.getStudentId());
+                        System.out.println("Borrow Date: " + transaction.getBorrowDate());
+                        System.out.println("Due Date: " + dueDate);
 
-                        long daysLate = ChronoUnit.DAYS.between(request.getDueDate(), currentDate);
-                        System.out.println("days late: " + daysLate);
+                        if (returnDate != null) {
+                            System.out.println("Return Date: " + returnDate);
+                            long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
+                            System.out.println("Days Late: " + daysLate);
+                            System.out.println("Status: RETURNED (Late)");
+                        } else {
+                            long daysLate = ChronoUnit.DAYS.between(dueDate, currentDate);
+                            System.out.println("Days Late: " + daysLate);
+                            System.out.println("Status: NOT RETURNED YET");
+                        }
 
                         found = true;
                     }
-
                 }
             }
         }
