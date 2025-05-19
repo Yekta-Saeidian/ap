@@ -346,7 +346,7 @@ public class Library {
             if (request.isApproved() == true) {
                 LocalDate currentDate = LocalDate.now();
 
-                if(currentDate.isAfter(request.getDueDate())) {
+                if (currentDate.isAfter(request.getDueDate())) {
                     Book book = findBookByTitle(books, request.getBookTitle());
                     Student student = findStudentById(students, request.getStudentId());
 
@@ -436,12 +436,97 @@ public class Library {
         }
     }
 
+    public void showMostBorrowedBooks(Library library, Input input) {
+        ArrayList<Borrow> transactions = fileHandler.loadTransactionsHistory();
+        ArrayList<Book> books = fileHandler.loadBooks();
+
+        LocalDate oneYearAgo = LocalDate.now().minusYears(1);
+
+        ArrayList<String> bookTitles = new ArrayList<>();
+        ArrayList<Integer> borrowCounts = new ArrayList<>();
+
+        for (Borrow transaction : transactions) {
+            if (transaction.isApproved() &&
+                    transaction.getBorrowDate() != null &&
+                    !transaction.getBorrowDate().isBefore(oneYearAgo) &&
+                    transaction.getReturnDate() == null) {
+
+                String bookTitle = transaction.getBookTitle();
+                boolean found = false;
+
+                for (int i = 0; i < bookTitles.size(); i++) {
+                    if (bookTitles.get(i).equals(bookTitle)) {
+                        borrowCounts.set(i, borrowCounts.get(i) + 1);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    bookTitles.add(bookTitle);
+                    borrowCounts.add(1);
+                }
+            }
+        }
+
+        for (int i = 0; i < borrowCounts.size(); i++) {
+            for (int j = i + 1; j < borrowCounts.size(); j++) {
+                if (borrowCounts.get(i) < borrowCounts.get(j)) {
+
+                    int tempCount = borrowCounts.get(i);
+                    borrowCounts.set(i, borrowCounts.get(j));
+                    borrowCounts.set(j, tempCount);
+
+                    String tempTitle = bookTitles.get(i);
+                    bookTitles.set(i, bookTitles.get(j));
+                    bookTitles.set(j, tempTitle);
+                }
+            }
+        }
+
+        System.out.println("\nTop 10 Most Borrowed Books in Last Year:");
+
+        int count = 0;
+        for (int i = 0; i < bookTitles.size() && count < 10; i++) {
+            Book book = findBookByTitle(books, bookTitles.get(i));
+            if (book != null) {
+                System.out.println("\nBook Title: " + book.getTitle());
+                System.out.println("Author: " + book.getAuthor());
+                System.out.println("Year of Publication: " + book.getYearOfPublication());
+                System.out.println("Total Borrows: " + borrowCounts.get(i));
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            System.out.println("\nNo borrowing records found in the last year.");
+        }
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    return;
+                case 2:
+                    return;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+        }
+    }
+
     public void showPendingRequests(Library library, Input input, int assistantId, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
         ArrayList<Book> books = fileHandler.loadBooks();
         ArrayList<Student> students = fileHandler.loadStudents();
         int studentId = 0;
+        boolean found = false;
 
         if (option == 3) {
             System.out.println("\nborrow requests");
@@ -456,6 +541,8 @@ public class Library {
                         System.out.println("student id: " + request.getStudentId());
                         studentId = request.getStudentId();
                         System.out.println("book title: " + book.getTitle());
+
+                        found = true;
 
                         System.out.println("\ndo you approve? (Y/N)");
                         String answer = input.scanString();
@@ -482,6 +569,8 @@ public class Library {
                         studentId = request.getStudentId();
                         System.out.println("book title: " + book.getTitle());
 
+                        found = true;
+
                         System.out.println("\ndo you approve? (Y/N)");
                         String answer = input.scanString();
 
@@ -492,6 +581,9 @@ public class Library {
                 }
             }
         }
+
+        if (!found)
+            System.out.println("request not found or already approved");
     }
 
     private void approveRequest(int studentId, int assistantId, Library library, Input input, int option) {

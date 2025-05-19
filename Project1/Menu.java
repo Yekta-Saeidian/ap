@@ -74,6 +74,7 @@ public class Menu {
                     library.showAssistantsReport(library, input);
                     break;
                 case 4:
+                    library.showMostBorrowedBooks(library, input);
                     break;
                 case 5:
                     return;
