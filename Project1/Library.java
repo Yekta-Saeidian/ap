@@ -424,6 +424,20 @@ public class Library {
                         }
                     }
 
+                    Borrow borrowToRemove = null;
+                    for (Borrow borrow : requests) {
+                        if (borrow.getStudentId() == studentId &&
+                                borrow.getBookTitle().equalsIgnoreCase(request.getBookTitle()) &&
+                                borrow.isApproved()) {
+                            borrowToRemove = borrow;
+                            break;
+                        }
+                    }
+                    if (borrowToRemove != null) {
+                        requests.remove(borrowToRemove);
+                    }
+
+                    fileHandler.saveBorrowRequests(requests);
                     fileHandler.saveReturnRequests(returnRequests);
                     fileHandler.saveBooks(books);
                     System.out.println("your approval has been submitted successfully");

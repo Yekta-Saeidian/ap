@@ -215,14 +215,29 @@ public class FileHandler {
                             Integer.parseInt(parts[0].trim()),
                             parts[1].trim());
 
+//                    if (parts.length > 2 && !parts[2].equals("null")) {
+//                        returns.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
+//                        returns.setBorrowDate(LocalDate.parse(parts[3]));
+//                        returns.setDueDate(LocalDate.parse(parts[4]));
+//                        if (!parts[5].equals("null")) {
+//                            returns.setReturnDate(LocalDate.parse(parts[5]));
+//                        }
+//                    }
+
                     if (parts.length > 2 && !parts[2].equals("null")) {
-                        returns.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
-                        returns.setBorrowDate(LocalDate.parse(parts[3]));
-                        returns.setDueDate(LocalDate.parse(parts[4]));
-                        if (!parts[5].equals("null")) {
-                            returns.setReturnDate(LocalDate.parse(parts[5]));
-                        }
+                        returns.approveReturnRequest(Integer.parseInt(parts[2].trim()));
                     }
+
+                    if (parts.length > 3 && !parts[3].equals("null")) {
+                        returns.setBorrowDate(LocalDate.parse(parts[3]));
+                    }
+                    if (parts.length > 4 && !parts[4].equals("null")) {
+                        returns.setDueDate(LocalDate.parse(parts[4]));
+                    }
+                    if (parts.length > 5 && !parts[5].equals("null")) {
+                        returns.setReturnDate(LocalDate.parse(parts[5]));
+                    }
+
                     returnss.add(returns);
                 }
             }
