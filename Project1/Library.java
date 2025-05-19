@@ -390,6 +390,52 @@ public class Library {
         }
     }
 
+    public void showAssistantsReport(Library library, Input input) {
+        ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
+        ArrayList<LibraryAssistant> assistants = fileHandler.loadAssistants();
+
+        System.out.println("\nAssistants Report:");
+
+        for (LibraryAssistant assistant : assistants) {
+            int borrowCount = 0;
+            int returnCount = 0;
+
+            for (Borrow transaction : allTransactions) {
+                if (transaction.getAssistantId() == assistant.getId()) {
+                    if (transaction.getReturnDate() == null) {
+                        borrowCount++;
+                    } else {
+                        returnCount++;
+                    }
+                }
+            }
+
+            System.out.println("\nAssistant: " + assistant.getFirstName() + " " + assistant.getLastName());
+            System.out.println("ID: " + assistant.getId());
+            System.out.println("Borrow Operations: " + borrowCount);
+            System.out.println("Return Operations: " + returnCount);
+            System.out.println("Total Transactions: " + (borrowCount + returnCount));
+        }
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
+    }
+
     public void showPendingRequests(Library library, Input input, int assistantId, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
@@ -410,6 +456,13 @@ public class Library {
                         System.out.println("student id: " + request.getStudentId());
                         studentId = request.getStudentId();
                         System.out.println("book title: " + book.getTitle());
+
+                        System.out.println("\ndo you approve? (Y/N)");
+                        String answer = input.scanString();
+
+                        if (answer.toLowerCase().equals("y")) {
+                            approveRequest(studentId, assistantId, library, input, option);
+                        }
                     }
                 }
             }
@@ -428,16 +481,16 @@ public class Library {
                         System.out.println("student id: " + request.getStudentId());
                         studentId = request.getStudentId();
                         System.out.println("book title: " + book.getTitle());
+
+                        System.out.println("\ndo you approve? (Y/N)");
+                        String answer = input.scanString();
+
+                        if (answer.toLowerCase().equals("y")) {
+                            approveRequest(studentId, assistantId, library, input, option);
+                        }
                     }
                 }
             }
-        }
-
-        System.out.println("\ndo you approve? (Y/N)");
-        String answer = input.scanString();
-
-        if (answer.toLowerCase().equals("y")) {
-            approveRequest(studentId, assistantId, library, input, option);
         }
     }
 
@@ -460,6 +513,7 @@ public class Library {
                     }
 
                     fileHandler.saveBorrowRequests(requests);
+                    fileHandler.saveTransactionToHistory(request);
                     fileHandler.saveBooks(books);
                     System.out.println("your approval has been submitted successfully");
 
@@ -495,6 +549,7 @@ public class Library {
 
                     fileHandler.saveBorrowRequests(requests);
                     fileHandler.saveReturnRequests(returnRequests);
+                    fileHandler.saveTransactionToHistory(request);
                     fileHandler.saveBooks(books);
                     System.out.println("your approval has been submitted successfully");
 

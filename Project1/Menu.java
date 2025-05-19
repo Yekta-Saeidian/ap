@@ -71,6 +71,7 @@ public class Menu {
                     library.overdueBooksList(library, input);
                     break;
                 case 3:
+                    library.showAssistantsReport(library, input);
                     break;
                 case 4:
                     break;

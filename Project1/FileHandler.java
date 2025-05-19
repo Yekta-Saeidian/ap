@@ -13,6 +13,7 @@ public class FileHandler {
     private final String ASSISTANTS_FILE = "assistants.txt";
     private final String BORROW_REQUESTS_FILE = "borrowRequests.txt";
     private final String RETURN_REQUESTS_FILE = "returnRequests.txt";
+    private final String TRANSACTIONS_HISTORY_FILE = "transactions_history.txt";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void saveBooks(ArrayList<Book> books) {
@@ -100,6 +101,20 @@ public class FileHandler {
             }
         } catch (IOException e) {
             System.err.println("Error saving borrow requests: " + e.getMessage());
+        }
+    }
+
+    public void saveTransactionToHistory(Borrow transaction) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(TRANSACTIONS_HISTORY_FILE, true))) {
+            writer.println(transaction.getStudentId() + "," +
+                    transaction.getBookTitle() + "," +
+                    transaction.getAssistantId() + "," +
+                    transaction.getBorrowDate() + "," +
+                    transaction.getDueDate() + "," +
+                    transaction.getReturnDate() + "," +
+                    (transaction.getReturnDate() != null ? "RETURNED" : "BORROWED"));
+        } catch (IOException e) {
+            System.err.println("Error saving transaction history: " + e.getMessage());
         }
     }
 
@@ -250,5 +265,49 @@ public class FileHandler {
             System.err.println("Error loading borrow requests: " + e.getMessage());
         }
         return returnss;
+    }
+
+    public ArrayList<Borrow> loadTransactionsHistory() {
+        ArrayList<Borrow> history = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(TRANSACTIONS_HISTORY_FILE))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 7) {
+                    Borrow transaction = new Borrow(
+                            Integer.parseInt(parts[0].trim()), // studentId
+                            parts[1].trim()                   // bookTitle
+                    );
+
+                    // Set assistant ID
+                    if (!parts[2].trim().equals("null")) {
+                        transaction.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
+                    }
+
+                    // Parse dates
+                    try {
+                        if (!parts[3].trim().equals("null")) {
+                            transaction.setBorrowDate(LocalDate.parse(parts[3].trim(), DATE_FORMATTER));
+                        }
+                        if (!parts[4].trim().equals("null")) {
+                            transaction.setDueDate(LocalDate.parse(parts[4].trim(), DATE_FORMATTER));
+                        }
+                        if (!parts[5].trim().equals("null")) {
+                            transaction.setReturnDate(LocalDate.parse(parts[5].trim(), DATE_FORMATTER));
+                        }
+                    } catch (DateTimeParseException e) {
+                        System.err.println("Error parsing date in transaction history: " + e.getMessage());
+                        continue;
+                    }
+
+                    history.add(transaction);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading transactions history: " + e.getMessage());
+        }
+        return history;
     }
 }
