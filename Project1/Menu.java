@@ -68,6 +68,7 @@ public class Menu {
                     library.addLibraryAssistant(library, input);
                     break;
                 case 2:
+                    library.overdueBooksList(library, input);
                     break;
                 case 3:
                     break;
@@ -90,9 +91,9 @@ public class Menu {
         System.out.println("4.book return confirmation");
         System.out.println("5.exit");
 
-        int option = input.scanInt();
 
-        while (option != 5) {
+        do {
+            int option = input.scanInt();
             switch (option) {
                 case 1:
                     break;
@@ -110,7 +111,7 @@ public class Menu {
                 default:
                     System.out.println("invalid selection");
             }
-        }
+        } while (option != 5);
     }
 
     public void printStudentMenu(Library library, Input input, int id) {

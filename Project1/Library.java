@@ -1,5 +1,6 @@
 package Project1;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -334,6 +335,61 @@ public class Library {
         }
     }
 
+    public void overdueBooksList(Library library, Input input) {
+        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Student> students = fileHandler.loadStudents();
+        boolean found = false;
+
+        System.out.println("overdue book list:");
+        for (Borrow request : requests) {
+            if (request.isApproved() == true) {
+                LocalDate currentDate = LocalDate.now();
+
+                if(currentDate.isAfter(request.getDueDate())) {
+                    Book book = findBookByTitle(books, request.getBookTitle());
+                    Student student = findStudentById(students, request.getStudentId());
+
+                    if (student != null && book != null) {
+                        System.out.println("\nbook title: " + book.getTitle());
+                        System.out.println("student name: " + student.getFirstName() + " " + student.getLastName());
+                        System.out.println("student id: " + request.getStudentId());
+                        System.out.println("date of borrow: " + request.getBorrowDate());
+                        System.out.println("date of due: " + request.getDueDate());
+
+                        long daysLate = ChronoUnit.DAYS.between(request.getDueDate(), currentDate);
+                        System.out.println("days late: " + daysLate);
+
+                        found = true;
+                    }
+
+                }
+            }
+        }
+
+        if (!found) {
+            System.out.println("\nthere is no overdue book");
+        }
+
+        System.out.println("\n1.menu");
+        System.out.println("2.exit");
+        int option = 0;
+        while (true) {
+            option = input.scanInt();
+            switch (option) {
+                case 1:
+                    menu.printManagerMenu(library, input);
+                    break;
+                case 2:
+                    return;
+                default:
+                    System.out.println("invalid option");
+                    break;
+            }
+
+        }
+    }
+
     public void showPendingRequests(Library library, Input input, int assistantId, int option) {
         ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
         ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
@@ -391,7 +447,7 @@ public class Library {
         ArrayList<Book> books = fileHandler.loadBooks();
         boolean found = false;
 
-        if(option==3) {
+        if (option == 3) {
             for (Borrow request : requests) {
                 if (request.getStudentId() == studentId && !request.isApproved()) {
                     request.approveBorrowRequest(assistantId);
@@ -412,7 +468,7 @@ public class Library {
             }
         }
 
-        if(option==4) {
+        if (option == 4) {
             for (Borrow request : returnRequests) {
                 if (request.getStudentId() == studentId && !request.isApproved()) {
                     request.approveReturnRequest(assistantId);

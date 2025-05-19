@@ -48,7 +48,7 @@ public class Borrow {
     public void approveBorrowRequest(int assistantId) {
         this.assistantId = assistantId;
         this.borrowDate = LocalDate.now();
-        this.dueDate = borrowDate.plusWeeks(2);
+        this.dueDate = LocalDate.now().plusWeeks(2);
         this.approved = true;
     }
 
@@ -59,14 +59,14 @@ public class Borrow {
     }
 
     public void setBorrowDate(LocalDate borrowDate) {
-        this.borrowDate = LocalDate.now();
+        this.borrowDate = borrowDate;
     }
 
     public void setDueDate(LocalDate dueDate) {
-        this.dueDate = LocalDate.now();
+        this.dueDate = dueDate;
     }
 
     public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = LocalDate.now();
+        this.returnDate = returnDate;
     }
 }

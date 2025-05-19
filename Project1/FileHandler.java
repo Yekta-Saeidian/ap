@@ -3,6 +3,7 @@ package Project1;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class FileHandler {
@@ -179,6 +180,7 @@ public class FileHandler {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(BORROW_REQUESTS_FILE))) {
             String line;
+
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 2) {
@@ -186,12 +188,24 @@ public class FileHandler {
                             Integer.parseInt(parts[0].trim()),
                             parts[1].trim());
 
-                    if (parts.length > 2 && !parts[2].equals("null")) {
-                        borrow.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
-                        borrow.setBorrowDate(LocalDate.parse(parts[3]));
-                        borrow.setDueDate(LocalDate.parse(parts[4]));
-                        if (!parts[5].equals("null")) {
-                            borrow.setReturnDate(LocalDate.parse(parts[5]));
+                    if (parts.length >= 6) {
+                        if (!parts[2].equals("null")) {
+                            borrow.approveBorrowRequest(Integer.parseInt(parts[2].trim())); // assistantId
+                        }
+
+                        try {
+                            if (!parts[3].equals("null")) {
+                                borrow.setBorrowDate(LocalDate.parse(parts[3].trim()));
+                            }
+                            if (!parts[4].equals("null")) {
+                                borrow.setDueDate(LocalDate.parse(parts[4].trim()));
+                            }
+                            if (!parts[5].equals("null")) {
+                                borrow.setReturnDate(LocalDate.parse(parts[5].trim()));
+                            }
+                        } catch (DateTimeParseException e) {
+                            System.err.println("Error parsing date" + e.getMessage());
+                            continue;
                         }
                     }
                     borrows.add(borrow);
@@ -214,15 +228,6 @@ public class FileHandler {
                     Borrow returns = new Borrow(
                             Integer.parseInt(parts[0].trim()),
                             parts[1].trim());
-
-//                    if (parts.length > 2 && !parts[2].equals("null")) {
-//                        returns.approveBorrowRequest(Integer.parseInt(parts[2].trim()));
-//                        returns.setBorrowDate(LocalDate.parse(parts[3]));
-//                        returns.setDueDate(LocalDate.parse(parts[4]));
-//                        if (!parts[5].equals("null")) {
-//                            returns.setReturnDate(LocalDate.parse(parts[5]));
-//                        }
-//                    }
 
                     if (parts.length > 2 && !parts[2].equals("null")) {
                         returns.approveReturnRequest(Integer.parseInt(parts[2].trim()));
