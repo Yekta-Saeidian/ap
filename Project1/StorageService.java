@@ -17,4 +17,15 @@ public interface StorageService {
     ArrayList<Borrow> loadBorrowRequests();
     ArrayList<Borrow> loadReturnRequests();
     ArrayList<Borrow> loadTransactionsHistory();
+
+    static StorageService create(StorageType type) {
+        switch (type) {
+            case TABSPLIT:
+                return new TabSplitStorageService();
+            case JSON:
+            case SQLITE:
+            default:
+                throw new IllegalArgumentException("Unknown storage type: " + type);
+        }
+    }
 }
