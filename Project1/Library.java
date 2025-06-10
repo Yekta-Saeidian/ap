@@ -10,22 +10,24 @@ public class Library {
     private ArrayList<Student> students;
     private ArrayList<LibraryAssistant> assistants;
     private ArrayList<Borrow> borrows;
+    private StorageService storageService;
 
     Input input = new Input();
     Menu menu = new Menu();
-    FileHandler fileHandler = new FileHandler();
-
-    public Library() {
-        this.assistants.add(new LibraryAssistant("shahpoor", "saeidian", 1111));
-        this.assistants.add(new LibraryAssistant("azam", "ahangar", 1112));
-    }
+//    FileHandler fileHandler = new FileHandler();
 
     public Library(String name) {
-        this.name = name;
-        this.books = new ArrayList<>();
-        this.students = new ArrayList<>();
-        this.assistants = new ArrayList<>();
-        this.borrows = new ArrayList<>();
+        this.storageService = StorageService.create(ConfigReader.readConfig());
+        this.books = storageService.loadBooks();
+        this.students = storageService.loadStudents();
+        this.assistants = storageService.loadAssistants();
+        this.borrows = storageService.loadBorrowRequests();
+
+        if (this.assistants.isEmpty()) {
+            this.assistants.add(new LibraryAssistant("shahpoor", "saeidian", 1111));
+            this.assistants.add(new LibraryAssistant("azam", "ahangar", 1112));
+            storageService.saveAssistants(this.assistants);
+        }
     }
 
     public ArrayList<Student> getStudents() {
@@ -44,7 +46,7 @@ public class Library {
         System.out.println("ID:");
         int id = input.scanInt();
 
-        ArrayList<LibraryAssistant> currentAssistants = fileHandler.loadAssistants();
+        ArrayList<LibraryAssistant> currentAssistants = storageService.loadAssistants();
         currentAssistants.add(new LibraryAssistant(firstName, lastName, id));
 
         System.out.println("\n1.add more assistants");
@@ -56,7 +58,7 @@ public class Library {
                     addLibraryAssistant(library, input);
                     break;
                 case 2:
-                    fileHandler.saveAssistants(currentAssistants);
+                    storageService.saveAssistants(currentAssistants);
                     System.out.println("new assistant added successfully\n");
 
                     System.out.println("1.menu");
@@ -96,7 +98,7 @@ public class Library {
         System.out.println("number of pages:");
         int pages = input.scanInt();
 
-        ArrayList<Book> currentBooks = fileHandler.loadBooks();
+        ArrayList<Book> currentBooks = storageService.loadBooks();
         currentBooks.add(new Book(title, author, yearOfPublication, pages, false));
 
         System.out.println("\n1.add more books");
@@ -108,7 +110,7 @@ public class Library {
                     addBook(library, input, assistantID);
                     break;
                 case 2:
-                    fileHandler.saveBooks(currentBooks);
+                    storageService.saveBooks(currentBooks);
                     System.out.println("new book added successfully\n");
 
                     System.out.println("1.menu");
@@ -151,7 +153,7 @@ public class Library {
         LocalDate dateOfMembership = LocalDate.now();
 
         students.add(new Student(firstName, lastName, id, field, dateOfMembership));
-        fileHandler.saveStudents(students);
+        storageService.saveStudents(students);
         System.out.println("registered successfully\n");
 
         System.out.println("1.menu");
@@ -177,7 +179,7 @@ public class Library {
         String bookTitle = input.scanString().toLowerCase();
         boolean found = false;
 
-        for (Book book : fileHandler.loadBooks()) {
+        for (Book book : storageService.loadBooks()) {
             if (book.getTitle().toLowerCase().contains(bookTitle)) {
 
                 System.out.println("book title:" + book.getTitle());
@@ -192,10 +194,10 @@ public class Library {
                     String answer = input.scanString();
 
                     if (answer.toLowerCase().equals("y")) {
-                        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
+                        ArrayList<Borrow> requests = storageService.loadBorrowRequests();
 
                         requests.add(new Borrow(id, book.getTitle()));
-                        fileHandler.saveBorrowRequests(requests);
+                        storageService.saveBorrowRequests(requests);
 
                         System.out.println("request submitted successfully.");
                     }
@@ -228,9 +230,9 @@ public class Library {
     }
 
     public boolean returnBookRequest(Library library, Input input, int id) {
-        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
-        ArrayList<Book> books = fileHandler.loadBooks();
-        ArrayList<Student> students = fileHandler.loadStudents();
+        ArrayList<Borrow> requests = storageService.loadBorrowRequests();
+        ArrayList<Book> books = storageService.loadBooks();
+        ArrayList<Student> students = storageService.loadStudents();
         boolean found = false;
 
         for (Borrow request : requests) {
@@ -250,10 +252,10 @@ public class Library {
                         String answer = input.scanString();
 
                         if (answer.toLowerCase().equals("y")) {
-                            ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
+                            ArrayList<Borrow> returnRequests = storageService.loadReturnRequests();
 
                             returnRequests.add(new Borrow(id, book.getTitle()));
-                            fileHandler.saveReturnRequests(returnRequests);
+                            storageService.saveReturnRequests(returnRequests);
 
                             System.out.println("request submitted successfully.");
                         }
@@ -287,8 +289,8 @@ public class Library {
     }
 
     public boolean unreturnedBookList(Library library, Input input, int id) {
-        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
-        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Borrow> requests = storageService.loadBorrowRequests();
+        ArrayList<Book> books = storageService.loadBooks();
         boolean found = false;
 
         System.out.println("unreturned book list:");
@@ -330,9 +332,9 @@ public class Library {
     }
 
     public boolean overdueBooksList(Library library, Input input) {
-        ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
-        ArrayList<Book> books = fileHandler.loadBooks();
-        ArrayList<Student> students = fileHandler.loadStudents();
+        ArrayList<Borrow> allTransactions = storageService.loadTransactionsHistory();
+        ArrayList<Book> books = storageService.loadBooks();
+        ArrayList<Student> students = storageService.loadStudents();
         boolean found = false;
 
         System.out.println("overdue book list:");
@@ -397,8 +399,8 @@ public class Library {
     }
 
     public boolean showAssistantsReport(Library library, Input input) {
-        ArrayList<Borrow> allTransactions = fileHandler.loadTransactionsHistory();
-        ArrayList<LibraryAssistant> assistants = fileHandler.loadAssistants();
+        ArrayList<Borrow> allTransactions = storageService.loadTransactionsHistory();
+        ArrayList<LibraryAssistant> assistants = storageService.loadAssistants();
 
         System.out.println("\nAssistants Report:");
 
@@ -442,8 +444,8 @@ public class Library {
     }
 
     public boolean showMostBorrowedBooks(Library library, Input input) {
-        ArrayList<Borrow> transactions = fileHandler.loadTransactionsHistory();
-        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Borrow> transactions = storageService.loadTransactionsHistory();
+        ArrayList<Book> books = storageService.loadBooks();
 
         LocalDate oneYearAgo = LocalDate.now().minusYears(1);
 
@@ -525,10 +527,10 @@ public class Library {
     }
 
     public boolean showPendingRequests(Library library, Input input, int assistantId, int option) {
-        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
-        ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
-        ArrayList<Book> books = fileHandler.loadBooks();
-        ArrayList<Student> students = fileHandler.loadStudents();
+        ArrayList<Borrow> requests = storageService.loadBorrowRequests();
+        ArrayList<Borrow> returnRequests = storageService.loadReturnRequests();
+        ArrayList<Book> books = storageService.loadBooks();
+        ArrayList<Student> students = storageService.loadStudents();
         int studentId = 0;
         boolean found = false;
 
@@ -605,9 +607,9 @@ public class Library {
     }
 
     private boolean approveRequest(int studentId, int assistantId, Library library, Input input, int option) {
-        ArrayList<Borrow> requests = fileHandler.loadBorrowRequests();
-        ArrayList<Borrow> returnRequests = fileHandler.loadReturnRequests();
-        ArrayList<Book> books = fileHandler.loadBooks();
+        ArrayList<Borrow> requests = storageService.loadBorrowRequests();
+        ArrayList<Borrow> returnRequests = storageService.loadReturnRequests();
+        ArrayList<Book> books = storageService.loadBooks();
         boolean found = false;
 
         if (option == 3) {
@@ -622,9 +624,9 @@ public class Library {
                         }
                     }
 
-                    fileHandler.saveBorrowRequests(requests);
-                    fileHandler.saveTransactionToHistory(request);
-                    fileHandler.saveBooks(books);
+                    storageService.saveBorrowRequests(requests);
+                    storageService.saveTransactionToHistory(request);
+                    storageService.saveBooks(books);
                     System.out.println("your approval has been submitted successfully");
 
                     found = true;
@@ -657,10 +659,10 @@ public class Library {
                         requests.remove(borrowToRemove);
                     }
 
-                    fileHandler.saveBorrowRequests(requests);
-                    fileHandler.saveReturnRequests(returnRequests);
-                    fileHandler.saveTransactionToHistory(request);
-                    fileHandler.saveBooks(books);
+                    storageService.saveBorrowRequests(requests);
+                    storageService.saveReturnRequests(returnRequests);
+                    storageService.saveTransactionToHistory(request);
+                    storageService.saveBooks(books);
                     System.out.println("your approval has been submitted successfully");
 
                     found = true;
