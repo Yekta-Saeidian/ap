@@ -23,7 +23,9 @@ public interface StorageService {
             case TABSPLIT:
                 return new TabSplitStorageService();
             case JSON:
+                return new JsonStorageService();
             case SQLITE:
+                return new SqliteStorageService();
             default:
                 throw new IllegalArgumentException("Unknown storage type: " + type);
         }
