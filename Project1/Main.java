@@ -4,11 +4,14 @@ public class Main {
 
     public static void main(String[] args) {
 
+        StorageType storageType = ConfigReader.readConfig();
+        System.out.println("Using storage type: " + storageType);
+
         Library library = new Library("The Eternal Bookshelf");
         Input input = new Input();
         Menu menu = new Menu();
 
-        System.out.println("User Type:\n");
+        System.out.println("\nUser Type:\n");
         System.out.println("1.Manager");
         System.out.println("2.Library Assistant");
         System.out.println("3.Student");
